@@ -44,16 +44,16 @@
 - [x] 1.24 Present each visible node’s name, raw headcount, and approved accessible performance indicator; verify component assertions and a browser check confirm the meaning is not conveyed by color alone.
 - [x] 1.24a Replace the historical nested-list tree presentation with the approved automatically laid out top-down canvas, metric cards, and directed connections while preserving accessible branch controls and the initial two-level visibility; verify a focused browser check observes the canvas hierarchy and independent expansion.
 - [x] 1.24b Add deterministic canvas navigation with zoom, pan, `+`, `-`, `Fit view`, and `Reset` controls while keeping node positions automatic; verify browser interactions change only the viewport and keep connections usable.
-- [ ] 1.25 Run a Foundation UI checkpoint in the browser for loading, error, empty, initial canvas, zoom/pan, expansion, collapse, connections, and card content; record observable results before stage documentation and review.
+- [x] 1.25 Run a Foundation UI checkpoint in the browser for loading, error, empty, initial canvas, zoom/pan, expansion, collapse, connections, and card content; record observable results before stage documentation and review.
 
 ### Foundation documentation and stage closure
 
-- [ ] 1.26 Update `README.md`, `docs/architecture.md`, and `docs/data-model.md` with the verified startup path, current API-to-canvas flow, validation boundary, and normalized hierarchy invariants; verify the documents describe only Foundation contracts actually implemented.
-- [ ] 1.27 Audit every Foundation requirement and acceptance scenario against implementation and evidence, then run the relevant targeted tests plus stage-level typecheck, lint, build, and browser verification; record any unmet scenario instead of marking the stage complete.
-- [ ] 1.28 Obtain an independent read-only Foundation review from a reviewer/context that did not author the implementation, covering the actual repository, requirements, evidence, correctness, cache/cancellation behavior, accessibility, and stage scope; record findings with P0/P1/P2/Nit severity without modifying code during review.
-- [ ] 1.29 Fix only the Foundation review findings accepted by the human, adding focused regression coverage for correctness defects; verify each accepted finding is resolved and document any explicitly deferred P2/Nit item.
-- [ ] 1.30 Run the final Foundation verification suite and scenario audit after fixes; verify no known P0/P1 finding remains and inspect the final diff for accidental Core, Polish, or Bonus scope.
-- [ ] 1.31 Prepare and create the independently reviewable Foundation commit `Step/1` and tag `step/1`; verify the tag resolves to that commit and the application starts and passes the Foundation checks from the tagged state.
+- [x] 1.26 Update `README.md`, `docs/architecture.md`, and `docs/data-model.md` with the verified startup path, current API-to-canvas flow, validation boundary, and normalized hierarchy invariants; verify the documents describe only Foundation contracts actually implemented.
+- [x] 1.27 Audit every Foundation requirement and acceptance scenario against implementation and evidence, then run the relevant targeted tests plus stage-level typecheck, lint, build, and browser verification; record any unmet scenario instead of marking the stage complete.
+- [x] 1.28 Obtain an independent read-only Foundation review from a reviewer/context that did not author the implementation, covering the actual repository, requirements, evidence, correctness, cache/cancellation behavior, accessibility, and stage scope; record findings with P0/P1/P2/Nit severity without modifying code during review.
+- [x] 1.29 Fix only the Foundation review findings accepted by the human, adding focused regression coverage for correctness defects; verify each accepted finding is resolved and document any explicitly deferred P2/Nit item.
+- [x] 1.30 Run the final Foundation verification suite and scenario audit after fixes; verify no known P0/P1 finding remains and inspect the final diff for accidental Core, Polish, or Bonus scope.
+- [x] 1.31 Prepare and create the independently reviewable Foundation commit `Step/1` and tag `step/1`; verify the tag resolves to that commit and the application starts and passes the Foundation checks from the tagged state.
 
 ## 2. Core
 
