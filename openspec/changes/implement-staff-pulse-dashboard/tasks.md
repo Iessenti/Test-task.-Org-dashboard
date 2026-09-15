@@ -9,22 +9,22 @@
 
 ### Project and development baseline
 
-- [ ] 1.5 Scaffold the React, Vite, and TypeScript client with absolute imports and the minimal test, typecheck, lint, and build tooling needed by the mandatory stages; verify the starter client passes its focused test, typecheck, lint, and production build.
+- [x] 1.5 Scaffold the React, Vite, and TypeScript client with absolute imports and the minimal test, typecheck, lint, and build tooling needed by the mandatory stages; verify the starter client passes its focused test, typecheck, lint, and production build.
 - [x] 1.6 Establish the independently running `node:http` mock-server boundary, Vite API proxy, and one-command local development path; verify the client reaches the server through the proxy without browser CORS configuration.
 - [x] 1.7 Apply the approved non-inline styling foundation without adding authentication, a database, or a UI component library; verify repository inspection and linting find no inline CSS or excluded system.
-- [ ] 1.8 Run a baseline checkpoint for client start, server start, proxy routing, typecheck, lint, tests, and build; record any baseline failure before organization behavior is added.
+- [x] 1.8 Run a baseline checkpoint for client start, server start, proxy routing, typecheck, lint, tests, and build; record any baseline failure before organization behavior is added.
 
 ### Organization endpoint
 
-- [ ] 1.9 Add a deterministic flat organization fixture with at least 40 nodes and at least three hierarchy levels; verify a targeted fixture test checks unique ids, required fields, parent references, depth, approved numeric constraints, and `performance` values from 0 through 100.
-- [ ] 1.10 Expose the fixture from `GET /api/org-tree` with explicit JSON, status, and error handling; verify a focused server/API test observes the required flat response contract.
+- [x] 1.9 Add a deterministic flat organization fixture with at least 40 nodes and at least three hierarchy levels; verify a targeted fixture test checks unique ids, required fields, parent references, depth, approved numeric constraints, and `performance` values from 0 through 100.
+- [x] 1.10 Expose the fixture from `GET /api/org-tree` with explicit JSON, status, and error handling; verify a focused server/API test observes the required flat response contract.
 
 ### Validation and topology snapshot
 
-- [ ] 1.11 Implement runtime validation of the approved DTO field types, including acceptance of an empty array and rejection of malformed fields or out-of-range metrics; verify targeted validator tests cover valid, empty, and representative invalid payloads.
-- [ ] 1.12 Implement the approved hierarchy-invariant validation for the flat DTO collection; verify targeted tests cover duplicate ids, missing parents, cycles, and every other approved invalid topology case.
-- [ ] 1.13 Normalize a validated collection into the ADR-001 Foundation snapshot with one canonical node per id and stable root/child indexes, without Core aggregates; verify targeted tests cover traversal, multiple branches, input-order preservation where required, and the approved root policy.
-- [ ] 1.14 Compose validation and normalization as an atomic acceptance boundary from `unknown` payload to `OrgSnapshot`; verify invalid input never produces or replaces a publishable snapshot.
+- [x] 1.11 Implement runtime validation of the approved DTO field types, including acceptance of an empty array and rejection of malformed fields or out-of-range metrics; verify targeted validator tests cover valid, empty, and representative invalid payloads.
+- [x] 1.12 Implement the approved hierarchy-invariant validation for the flat DTO collection; verify targeted tests cover duplicate ids, missing parents, cycles, and every other approved invalid topology case.
+- [x] 1.13 Normalize a validated collection into the ADR-001 Foundation snapshot with one canonical node per id and stable root/child indexes, without Core aggregates; verify targeted tests cover traversal, multiple branches, input-order preservation where required, and the approved root policy.
+- [x] 1.14 Compose validation and normalization as an atomic acceptance boundary from `unknown` payload to `OrgSnapshot`; verify invalid input never produces or replaces a publishable snapshot.
 
 ### Shared cached organization resource
 
