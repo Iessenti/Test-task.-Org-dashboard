@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { calculateOrgAggregates, getAveragePerformance } from './org-tree-aggregation';
+import { calculateOrgAggregates, getAveragePerformance, recalculateOrgAggregateChain } from './org-tree-aggregation';
 import type { OrgNodeDto } from './org-tree-validation';
 
 function node(id: string, parentId: string | null, headcount: number, budget: number, performance: number): OrgNodeDto {
@@ -81,5 +81,67 @@ describe('calculateOrgAggregates', () => {
 
   it('derives average performance from the weighted sum', () => {
     expect(getAveragePerformance({ totalHeadcount: 8, totalBudget: 0, weightedPerformanceSum: 540 })).toBe(67.5);
+  });
+});
+
+describe('recalculateOrgAggregateChain', () => {
+  it('recomputes a leaf and its ancestors after simultaneous metric changes', () => {
+    const nodes = [
+      node('root', null, 2, 100, 50),
+      node('branch', 'root', 3, 200, 80),
+      node('leaf', 'branch', 5, 300, 60),
+      node('unrelated', 'root', 4, 400, 40),
+    ];
+    const indexesResult = indexes(nodes);
+    const previous = calculateOrgAggregates(indexesResult);
+    const changedNodes = {
+      ...indexesResult.nodesById,
+      leaf: { ...indexesResult.nodesById.leaf, headcount: 8, performance: 90 },
+    };
+
+    const result = recalculateOrgAggregateChain({
+      ...indexesResult,
+      nodesById: changedNodes,
+      aggregatesById: previous,
+      targetId: 'leaf',
+    });
+
+    expect(result.affectedIds).toEqual(['leaf', 'branch', 'root']);
+    expect(result.aggregatesById.leaf).toEqual({ totalHeadcount: 8, totalBudget: 300, weightedPerformanceSum: 720 });
+    expect(result.aggregatesById.branch).toEqual({ totalHeadcount: 11, totalBudget: 500, weightedPerformanceSum: 960 });
+    expect(result.aggregatesById.root).toEqual({ totalHeadcount: 17, totalBudget: 1000, weightedPerformanceSum: 1220 });
+    expect(result.aggregatesById.unrelated).toBe(previous.unrelated);
+  });
+
+  it('supports repeated updates and zero-headcount subtrees without affecting other roots', () => {
+    const nodes = [
+      node('root-a', null, 1, 10, 50),
+      node('zero', 'root-a', 0, 20, 100),
+      node('root-b', null, 4, 40, 25),
+    ];
+    const indexesResult = indexes(nodes);
+    const initial = calculateOrgAggregates(indexesResult);
+    const first = recalculateOrgAggregateChain({
+      ...indexesResult,
+      nodesById: {
+        ...indexesResult.nodesById,
+        zero: { ...indexesResult.nodesById.zero, budget: 30 },
+      },
+      aggregatesById: initial,
+      targetId: 'zero',
+    });
+    const second = recalculateOrgAggregateChain({
+      ...indexesResult,
+      nodesById: {
+        ...indexesResult.nodesById,
+        zero: { ...indexesResult.nodesById.zero, budget: 35 },
+      },
+      aggregatesById: first.aggregatesById,
+      targetId: 'zero',
+    });
+
+    expect(getAveragePerformance(second.aggregatesById.zero)).toBeNull();
+    expect(second.aggregatesById['root-a']).toEqual({ totalHeadcount: 1, totalBudget: 45, weightedPerformanceSum: 50 });
+    expect(second.aggregatesById['root-b']).toBe(initial['root-b']);
   });
 });

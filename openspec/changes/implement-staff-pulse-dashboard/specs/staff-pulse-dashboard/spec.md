@@ -92,7 +92,7 @@ The Foundation dashboard SHALL render the organization hierarchy as a
 top-down, automatically laid out canvas tree in which branches can be expanded
 and collapsed and the second hierarchy level is visible by default. Every
 displayed node card SHALL show its name, raw headcount, raw budget, and
-performance as a numeric value, textual band, and color indicator.
+performance as a numeric value and color indicator.
 
 #### Scenario: Tree is first displayed
 - **WHEN** a non-empty organization snapshot is first rendered

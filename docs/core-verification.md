@@ -50,7 +50,7 @@
 - `git diff --check` — passed.
 - Browser rerun on `http://localhost:5176/` loaded the canvas-first dashboard;
   the accessibility tree exposed `Карта / Таблица`, canvas controls, visible
-  second-level cards, metrics, performance text and directed canvas content.
+  second-level cards, numeric performance values and directed canvas content.
 - Browser table switch exposed all five column headers, the search field and
   40 organization rows. The table projection showed aggregate totals and
   formatted budgets/averages.

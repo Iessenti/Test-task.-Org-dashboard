@@ -1,6 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import * as aggregation from './org-tree-aggregation';
-import { reconcileOrgSnapshots } from './org-tree-query';
+import { clearRealtimePatchWatermarks, orgTreeQueryOptions, reconcileOrgSnapshots, recordRealtimePatch } from './org-tree-query';
 import { parseOrgSnapshot } from './org-tree-validation';
 
 const payload = [
@@ -25,6 +25,8 @@ const payload = [
 ];
 
 describe('organization snapshot reconciliation', () => {
+  afterEach(() => clearRealtimePatchWatermarks());
+
   it('accepts a changed full snapshot with its computed aggregates', () => {
     const previous = parseOrgSnapshot(payload);
     const next = parseOrgSnapshot(payload.map((node) =>
@@ -63,5 +65,26 @@ describe('organization snapshot reconciliation', () => {
     expect(secondRerender.aggregatesById).toBe(snapshot.aggregatesById);
     expect(aggregateSpy).toHaveBeenCalledTimes(callsAfterAcceptance);
     aggregateSpy.mockRestore();
+  });
+
+  it('preserves a newer realtime node when an older full response resolves', () => {
+    const previous = parseOrgSnapshot(payload.map((node) => (
+      node.id === 'child' ? { ...node, headcount: 5, updatedAt: '2026-09-15T12:00:02.000Z' } : node
+    )));
+    const olderResponse = parseOrgSnapshot(payload);
+    recordRealtimePatch({
+      type: 'metric.patch',
+      eventId: 'evt-1',
+      sequence: 1,
+      nodeId: 'child',
+      metrics: { headcount: 5 },
+      updatedAt: '2026-09-15T12:00:02.000Z',
+    });
+
+    const structuralSharing = orgTreeQueryOptions().structuralSharing as (_left: unknown, _right: unknown) => unknown;
+    const accepted = structuralSharing(previous, olderResponse) as typeof previous;
+
+    expect(accepted.nodesById.child.headcount).toBe(5);
+    expect(accepted.aggregatesById.root.totalHeadcount).toBe(7);
   });
 });

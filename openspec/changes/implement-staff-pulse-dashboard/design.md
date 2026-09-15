@@ -134,7 +134,7 @@ subtle curved directed edges. It uses a light background with a restrained dot
 grid; there is one light theme only.
 
 Each canvas card shows the node name, raw headcount, raw budget, and
-performance as a numeric value, text band, and short colored scale. Cards stay
+performance as a numeric value and short colored scale. Cards stay
 neutral; `#73ABF5` is reserved for selection, active edges, controls, and focus
 states, while performance colors retain their independent low/medium/high
 meaning. The selected card receives an accent outline and its ancestor path may
@@ -273,10 +273,10 @@ must be reviewed before their dependent implementation begins:
   for non-inline styling. “Second level open by default” means roots and their
   direct children are visible initially; deeper descendants remain collapsed
   until their branch is expanded.
-- **Resolved 2026-09-15 — performance indicator.** Use bands `0..49` (low),
-  `50..79` (medium), and `80..100` (high). The color indicator is accompanied
-  by a textual band label and the numeric performance value, so meaning does
-  not rely on color alone.
+- **Resolved 2026-09-15 — performance indicator.** Use color bands `0..49`
+  (low), `50..79` (medium), and `80..100` (high), together with the visible
+  numeric performance value. Do not render textual band labels such as
+  `Низкая`, `Средняя`, or `Высокая`.
 - **Resolved 2026-09-15 — TanStack Query policy.** Use a `5000 ms` stale time
   and retry once only for transport errors and HTTP `5xx` responses. Do not
   retry HTTP `4xx`, JSON parsing, runtime-validation, or `AbortError` failures.
@@ -288,15 +288,56 @@ must be reviewed before their dependent implementation begins:
 
 ### Before Polish implementation
 
-- WebSocket, SSE, or efficient polling transport.
-- Realtime patch envelope, ordering, recovery, and the race between an in-flight
-  GET and a newer patch.
-- `updatedAt` semantics for realtime changes, including whether a patch carries
-  a new timestamp as metadata and how it participates in reconciliation.
-- Whether applying a patch renews freshness for the entire GET resource.
-- Retry cap/jitter policy beyond exponential backoff.
-- How `docs/data-model.md` satisfies the literal WebSocket-patch wording if a
-  different transport is selected.
+- **Resolved 2026-09-15 — realtime transport and patch envelope.** Use
+  Server-Sent Events (SSE) for the one-way server-to-client metric stream.
+  Each event uses a JSON envelope with `type: "metric.patch"`, a unique
+  `eventId`, monotonic `sequence`, an existing `nodeId`, a `metrics` object
+  containing only changed values from `headcount`, `budget`, and
+  `performance`, and an `updatedAt` ISO timestamp:
+
+  ```json
+  {
+    "type": "metric.patch",
+    "eventId": "evt-123",
+    "sequence": 42,
+    "nodeId": "node-7",
+    "metrics": {
+      "headcount": 12,
+      "budget": 1000,
+      "performance": 84
+    },
+    "updatedAt": "2026-09-15T12:00:00.000Z"
+  }
+  ```
+
+  SSE is selected because Polish requires server-to-client updates only and
+  the browser provides connection lifecycle support without adding a
+  bidirectional protocol. The stream is owned by the dashboard resource and
+  must be explicitly cleaned up when its final consumer leaves.
+- **Resolved 2026-09-15 — patch ordering, recovery, and freshness.** Treat
+  `sequence` as a global monotonic event number. Ignore events whose sequence
+  is less than or equal to the last applied sequence. Apply the next
+  contiguous event immediately. If a higher sequence reveals a gap, pause
+  patch application, perform a full GET for recovery, and resume the SSE
+  stream using `Last-Event-ID` after recovery. Each node's `updatedAt` is the
+  per-node freshness authority: a newer patch must not be overwritten by an
+  older value from an in-flight GET, while a newer full-response value may be
+  accepted. Applying a valid patch renews freshness for the complete query
+  resource; the normal five-second stale policy still applies afterwards.
+- **Resolved 2026-09-15 — reconnect backoff.** Use deterministic capped
+  exponential backoff without jitter: retry delays are `1, 2, 4, 8, 16,
+  30, 30...` seconds. The 30-second cap applies to every subsequent retry.
+  A successful SSE connection resets the delay sequence to one second for a
+  later interruption. Deterministic delays keep fake-timer verification
+  reproducible; jitter is intentionally unnecessary for the single-client
+  mock-server scope.
+- **Resolved 2026-09-15 — WebSocket wording in data-model documentation.**
+  `docs/data-model.md` will include a clearly labeled explanation that the
+  assignment's literal WebSocket-patch requirement is satisfied semantically
+  by the selected SSE stream. The document will describe the same
+  metric-only patch contract and explicitly distinguish the required patch
+  semantics from the actually implemented SSE transport; it will not claim
+  that the application uses WebSocket.
 
 ### Before optional Bonus implementation
 

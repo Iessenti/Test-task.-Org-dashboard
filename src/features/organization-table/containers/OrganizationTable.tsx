@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { TableShell, TableSurface } from './OrganizationTable.style';
 import type { OrgSnapshot } from '@/data/org-tree/org-tree-validation';
 import { buildOrganizationTableRows } from '@/features/organization-table/model/table-rows';
@@ -7,14 +7,17 @@ import { filterOrganizationTableRows } from '@/features/organization-table/model
 import { useDebouncedValue } from '@/features/organization-table/hooks/useDebouncedValue';
 import { OrganizationTableHeader } from '@/features/organization-table/components/OrganizationTableHeader';
 import { OrganizationTableRow } from '@/features/organization-table/components/OrganizationTableRow';
+import type { RealtimeFeedbackController } from '@/data/org-tree/use-realtime-feedback';
 
-export function OrganizationTable({ snapshot, selectedNodeId, onSelectNode }: {
+export function OrganizationTable({ snapshot, selectedNodeId, onSelectNode, feedback }: {
   snapshot: OrgSnapshot;
   selectedNodeId: string | null;
   onSelectNode: (_nodeId: string) => void;
+  feedback: RealtimeFeedbackController;
 }) {
   const [sort, setSort] = useState<TableSort>(null);
   const [filterInput, setFilterInput] = useState('');
+  const [focusedRowId, setFocusedRowId] = useState<string | null>(null);
   const debouncedFilter = useDebouncedValue(filterInput, 250);
   const baseRows = useMemo(() => buildOrganizationTableRows(snapshot), [snapshot]);
   const filteredRows = useMemo(
@@ -22,8 +25,44 @@ export function OrganizationTable({ snapshot, selectedNodeId, onSelectNode }: {
     [baseRows, debouncedFilter, snapshot],
   );
   const rows = useMemo(() => sortOrganizationTableRows(filteredRows, sort), [filteredRows, sort]);
+  const focusableRowId = rows.some((row) => row.id === focusedRowId)
+    ? focusedRowId
+    : rows[0]?.id ?? null;
 
   const tableSurfaceRef = useRef<HTMLDivElement>(null);
+  const focusRow = (rowId: string) => {
+    setFocusedRowId(rowId);
+    requestAnimationFrame(() => {
+      tableSurfaceRef.current?.querySelector<HTMLElement>(`[data-node-id="${rowId}"]`)?.focus();
+    });
+  };
+
+  const handleRowKeyDown = (event: KeyboardEvent<HTMLTableRowElement>, rowId: string) => {
+    const rowIndex = rows.findIndex((row) => row.id === rowId);
+    if (rowIndex === -1) return;
+
+    const nextIndex = event.key === 'ArrowDown'
+      ? Math.min(rowIndex + 1, rows.length - 1)
+      : event.key === 'ArrowUp'
+        ? Math.max(rowIndex - 1, 0)
+        : event.key === 'Home'
+          ? 0
+          : event.key === 'End'
+            ? rows.length - 1
+            : -1;
+
+    if (nextIndex !== -1) {
+      event.preventDefault();
+      if (nextIndex !== rowIndex) focusRow(rows[nextIndex].id);
+      return;
+    }
+
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      onSelectNode(rowId);
+    }
+  };
+
   useEffect(() => {
     if (selectedNodeId === null) return;
     const frame = requestAnimationFrame(() => {
@@ -53,9 +92,22 @@ export function OrganizationTable({ snapshot, selectedNodeId, onSelectNode }: {
 
   return (
     <TableSurface ref={tableSurfaceRef}>
-      <TableShell aria-label="Таблица организации">
+      <TableShell aria-label="Таблица организации" role="grid">
         <OrganizationTableHeader filterInput={filterInput} onFilterChange={setFilterInput} onSortInteraction={handleSortInteraction} sort={sort} />
-        <tbody>{rows.map((row) => <OrganizationTableRow key={row.id} isSelected={selectedNodeId === row.id} onSelect={onSelectNode} row={row} />)}</tbody>
+        <tbody>
+          {rows.map((row) => (
+            <OrganizationTableRow
+              key={row.id}
+              feedback={feedback}
+              isSelected={selectedNodeId === row.id}
+              onFocus={() => setFocusedRowId(row.id)}
+              onKeyDown={(event) => handleRowKeyDown(event, row.id)}
+              onSelect={onSelectNode}
+              row={row}
+              tabIndex={focusableRowId === row.id ? 0 : -1}
+            />
+          ))}
+        </tbody>
       </TableShell>
     </TableSurface>
   );

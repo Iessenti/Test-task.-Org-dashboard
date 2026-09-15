@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node --env-file-if-exists=.env scripts/dev.mjs",
     "server": "node --env-file-if-exists=.env server/index.mjs",
+    "test": "vitest run src && node --test server/*.test.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "build": "vite build"
@@ -30,6 +31,7 @@
     "eslint": "latest",
     "eslint-plugin-react-hooks": "latest",
     "eslint-plugin-react-refresh": "latest",
-    "globals": "latest"
+    "globals": "latest",
+    "vitest": "^3.2.7"
   }
 }
