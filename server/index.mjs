@@ -1,17 +1,8 @@
-import { createServer } from 'node:http';
+import { createMockServer } from './app.mjs';
 
 const port = Number(process.env.API_PORT ?? 3001);
 
-const server = createServer((request, response) => {
-  if (request.method === 'GET' && request.url === '/api/health') {
-    response.writeHead(200, { 'content-type': 'application/json; charset=utf-8' });
-    response.end(JSON.stringify({ ok: true }));
-    return;
-  }
-
-  response.writeHead(404, { 'content-type': 'application/json; charset=utf-8' });
-  response.end(JSON.stringify({ error: 'Not found' }));
-});
+const server = createMockServer();
 
 server.listen(port, '127.0.0.1', () => {
   console.log(`Mock server listening on http://127.0.0.1:${port}`);

@@ -9,10 +9,10 @@
 
 ### Project and development baseline
 
-- [x] 1.5 Scaffold the React, Vite, and TypeScript client with absolute imports and the minimal test, typecheck, lint, and build tooling needed by the mandatory stages; verify the starter client passes its focused test, typecheck, lint, and production build.
+- [ ] 1.5 Scaffold the React, Vite, and TypeScript client with absolute imports and the minimal test, typecheck, lint, and build tooling needed by the mandatory stages; verify the starter client passes its focused test, typecheck, lint, and production build.
 - [x] 1.6 Establish the independently running `node:http` mock-server boundary, Vite API proxy, and one-command local development path; verify the client reaches the server through the proxy without browser CORS configuration.
 - [x] 1.7 Apply the approved non-inline styling foundation without adding authentication, a database, or a UI component library; verify repository inspection and linting find no inline CSS or excluded system.
-- [x] 1.8 Run a baseline checkpoint for client start, server start, proxy routing, typecheck, lint, tests, and build; record any baseline failure before organization behavior is added.
+- [ ] 1.8 Run a baseline checkpoint for client start, server start, proxy routing, typecheck, lint, tests, and build; record any baseline failure before organization behavior is added.
 
 ### Organization endpoint
 
