@@ -1,4 +1,4 @@
-import { createGlobalStyle, styled } from 'styled-components';
+import { createGlobalStyle, styled } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
   :root {
@@ -16,20 +16,12 @@ export const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     min-width: 320px;
+    overflow: hidden;
   }
 `;
 
 export const AppShell = styled.main`
-  min-height: 100vh;
-  padding: 32px;
-
-  @media (max-width: 640px) {
+    height: 100vh;
     padding: 16px;
-  }
-`;
-
-export const Title = styled.h1`
-  margin: 0;
-  font-size: 2rem;
-  line-height: 1.2;
+    overflow: hidden;
 `;

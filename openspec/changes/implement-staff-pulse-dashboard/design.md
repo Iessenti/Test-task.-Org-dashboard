@@ -142,9 +142,10 @@ use the active edge treatment.
 
 The initial canvas view shows the first two hierarchy levels. Branches expand
 independently, with deeper teams hidden until their parent branch is expanded.
-The canvas supports zoom around the pointer, pan, `+`, `-`, `Fit view`, and
-`Reset` controls. Its initial framing prioritizes readable top-level and
-second-level cards; `Fit view` provides a deliberate whole-organization view.
+The canvas supports zoom around the pointer, pan, `+`, `-`, and `Fit view`
+controls. A later human decision removed the `Reset` control from the product
+scope. Its initial framing prioritizes readable top-level and second-level
+cards; `Fit view` provides a deliberate whole-organization view.
 Nodes are not user-dragged, so the automatic layout remains deterministic.
 
 ### Shared selection and detail presentation

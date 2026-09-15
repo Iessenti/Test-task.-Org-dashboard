@@ -43,7 +43,7 @@
 - [x] 1.23 Add accessible expand/collapse controls for branches while keeping expansion as client interaction state; verify keyboard and pointer interaction tests cover expanding, collapsing, and leaf behavior.
 - [x] 1.24 Present each visible node’s name, raw headcount, and approved accessible performance indicator; verify component assertions and a browser check confirm the meaning is not conveyed by color alone.
 - [x] 1.24a Replace the historical nested-list tree presentation with the approved automatically laid out top-down canvas, metric cards, and directed connections while preserving accessible branch controls and the initial two-level visibility; verify a focused browser check observes the canvas hierarchy and independent expansion.
-- [x] 1.24b Add deterministic canvas navigation with zoom, pan, `+`, `-`, `Fit view`, and `Reset` controls while keeping node positions automatic; verify browser interactions change only the viewport and keep connections usable.
+- [x] 1.24b Add deterministic canvas navigation with zoom, pan, `+`, `-`, and `Fit view` controls while keeping node positions automatic; verify browser interactions change only the viewport and keep connections usable.
 - [x] 1.25 Run a Foundation UI checkpoint in the browser for loading, error, empty, initial canvas, zoom/pan, expansion, collapse, connections, and card content; record observable results before stage documentation and review.
 
 ### Foundation documentation and stage closure
@@ -66,37 +66,37 @@
 
 ### Initial aggregation
 
-- [ ] 2.5 Extend the accepted snapshot with ADR-001 `aggregatesById` and one post-order initial aggregation pass for total headcount, total budget, and weighted performance sum; verify targeted unit tests prove correct results for leaves, internal nodes, and multiple branches.
-- [ ] 2.6 Cover aggregation invariants and edge cases, including zero total headcount, the approved root policy, and input-order independence where applicable; verify the unit suite includes the assignment-required aggregation test and displays no numeric average for a zero denominator.
-- [ ] 2.7 Integrate aggregation into atomic acceptance of each new or changed full snapshot while retaining existing aggregates for a semantically unchanged response; verify cache-level tests distinguish changed acceptance from no-op revalidation.
-- [ ] 2.8 Prove aggregate reuse across ordinary tree/table rerenders without a data change; verify an instrumentation or deterministic integration test observes no additional full aggregation pass for the same accepted snapshot.
+- [x] 2.5 Extend the accepted snapshot with ADR-001 `aggregatesById` and one post-order initial aggregation pass for total headcount, total budget, and weighted performance sum; verify targeted unit tests prove correct results for leaves, internal nodes, and multiple branches.
+- [x] 2.6 Cover aggregation invariants and edge cases, including zero total headcount, the approved root policy, and input-order independence where applicable; verify the unit suite includes the assignment-required aggregation test and displays no numeric average for a zero denominator.
+- [x] 2.7 Integrate aggregation into atomic acceptance of each new or changed full snapshot while retaining existing aggregates for a semantically unchanged response; verify cache-level tests distinguish changed acceptance from no-op revalidation.
+- [x] 2.8 Prove aggregate reuse across ordinary tree/table rerenders without a data change; verify an instrumentation or deterministic integration test observes no additional full aggregation pass for the same accepted snapshot.
 
 ### Analytical table projection
 
-- [ ] 2.9 Implement the approved canvas-first `Карта / Таблица` mode switch without duplicating query-owned organization data; verify a browser interaction can reach both representations and returns to the canvas as the initial mode after reload.
-- [ ] 2.10 Derive one analytical row per organization node with subdivision, approved level, total employees, total budget, and average performance; verify a focused table test covers all nodes and all five required columns.
-- [ ] 2.11 Format aggregate budgets as grouped digits followed by `руб.` and zero-headcount averages as `—`; verify deterministic formatter/component cases include `12 345 678 руб.` and the zero-denominator result.
+- [x] 2.9 Implement the approved canvas-first `Карта / Таблица` mode switch without duplicating query-owned organization data; verify a browser interaction can reach both representations and returns to the canvas as the initial mode after reload.
+- [x] 2.10 Derive one analytical row per organization node with subdivision, approved level, total employees, total budget, and average performance; verify a focused table test covers all nodes and all five required columns.
+- [x] 2.11 Format aggregate budgets as grouped digits followed by `руб.` and zero-headcount averages as `—`; verify deterministic formatter/component cases include `12 345 678 руб.` and the zero-denominator result.
 
 ### Sorting and filtering
 
-- [ ] 2.12 Implement deterministic derived sorting for every table column using the approved state transitions; verify interaction tests cover each column, exposed direction, required double-click reversal, and stable tie handling without mutating canonical node or child order.
-- [ ] 2.13 Implement derived name filtering with the approved matching/context rules and a 250 ms debounce; verify fake-timer tests show only the latest settled input applies and source organization data remains unchanged.
+- [x] 2.12 Implement deterministic derived sorting for every table column using the approved state transitions; verify interaction tests cover each column, exposed direction, required double-click reversal, and stable tie handling without mutating canonical node or child order.
+- [x] 2.13 Implement derived name filtering with the approved matching/context rules and a 250 ms debounce; verify fake-timer tests show only the latest settled input applies and source organization data remains unchanged.
 - [ ] 2.14 Verify sorting and filtering composition on derived rows; confirm changing either control produces the approved deterministic row set without recomputing aggregates or changing shared snapshot identities.
 
 ### Shared selection
 
-- [ ] 2.16 Implement the approved id-based shared selection between table and canvas without storing node objects or row indexes; verify selection survives mode switches, sorting, and filtering changes row positions.
-- [ ] 2.16a Implement the approved canvas detail panel with separate raw and aggregate metrics, child list, and update time; verify the panel is visible for a selected canvas card, hidden in table mode, and does not clear shared selection.
-- [ ] 2.16b Implement the approved reveal behavior for a selected node hidden by collapsed canvas ancestors; verify focused browser/component checks cover ancestor expansion, scrolling/centering, and visible selection only as approved.
-- [ ] 2.17 Run a Core interaction checkpoint for representation access, all table columns, aggregate values, budget/average formatting, sorting, debounce filtering, table-to-canvas selection, detail panel behavior, and hidden-node reveal; record failures before stage documentation and review.
+- [x] 2.16 Implement the approved id-based shared selection between table and canvas without storing node objects or row indexes; verify selection survives mode switches, sorting, and filtering changes row positions.
+- [x] 2.16a Implement the approved canvas detail panel with separate raw and aggregate metrics, child list, and update time; verify the panel is visible for a selected canvas card, hidden in table mode, and does not clear shared selection.
+- [x] 2.16b Implement the approved reveal behavior for a selected node hidden by collapsed canvas ancestors; verify focused browser/component checks cover ancestor expansion, scrolling/centering, and visible selection only as approved.
+- [x] 2.17 Run a Core interaction checkpoint for representation access, all table columns, aggregate values, budget/average formatting, sorting, debounce filtering, table-to-canvas selection, detail panel behavior, and hidden-node reveal; record failures before stage documentation and review.
 
 ### Core documentation and stage closure
 
-- [ ] 2.18 Update `docs/architecture.md` and `docs/data-model.md` with the implemented table projection, canvas/detail presentation, shared selection flow, aggregation equations, zero-headcount rule, and accurate initial/incremental complexity promises; verify the text agrees with ADR 001 and the implementation.
-- [ ] 2.19 Audit every Core acceptance scenario while rerunning all Foundation scenarios and the relevant aggregation, cache, table, and browser checks; record evidence that each newly accepted snapshot receives one full aggregation pass and ordinary rerenders reuse it.
-- [ ] 2.20 Obtain an independent read-only Core review from a reviewer/context that did not author the implementation, covering requirements, aggregation correctness, projection consistency, sorting/filtering, selection, accessibility, and stage scope; record severity-ranked findings without modifying code during review.
-- [ ] 2.21 Fix only the Core review findings accepted by the human and add focused regression coverage for correctness defects; verify each accepted finding is resolved and document any explicitly deferred P2/Nit item.
-- [ ] 2.22 Run the final Core verification suite and Foundation regression checks after fixes; verify no known P0/P1 finding remains and inspect the diff for accidental Polish or Bonus scope.
+- [x] 2.18 Update `docs/architecture.md` and `docs/data-model.md` with the implemented table projection, canvas/detail presentation, shared selection flow, aggregation equations, zero-headcount rule, and accurate initial/incremental complexity promises; verify the text agrees with ADR 001 and the implementation.
+- [x] 2.19 Audit every Core acceptance scenario while rerunning all Foundation scenarios and the relevant aggregation, cache, table, and browser checks; record evidence that each newly accepted snapshot receives one full aggregation pass and ordinary rerenders reuse it.
+- [x] 2.20 Obtain an independent read-only Core review from a reviewer/context that did not author the implementation, covering requirements, aggregation correctness, projection consistency, sorting/filtering, selection, accessibility, and stage scope; record severity-ranked findings without modifying code during review.
+- [x] 2.21 Fix only the Core review findings accepted by the human and add focused regression coverage for correctness defects; verify each accepted finding is resolved and document any explicitly deferred P2/Nit item.
+- [x] 2.22 Run the final Core verification suite and Foundation regression checks after fixes; verify no known P0/P1 finding remains and inspect the diff for accidental Polish or Bonus scope.
 - [ ] 2.23 Prepare and create the independently reviewable Core commit `Step/2` and tag `step/2`; verify the tag resolves to that commit and all Foundation and Core checks pass from the tagged state.
 
 ## 3. Polish
