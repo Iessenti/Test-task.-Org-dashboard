@@ -1,0 +1,398 @@
+[
+  {
+    "id": "division-1",
+    "name": "Дивизион 1",
+    "parentId": null,
+    "headcount": 130,
+    "budget": 1100000,
+    "performance": 17,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-1-department-1",
+    "name": "Отдел 1.1",
+    "parentId": "division-1",
+    "headcount": 32,
+    "budget": 265000,
+    "performance": 32,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-1-department-1-team-1",
+    "name": "Команда 1.1.1",
+    "parentId": "division-1-department-1",
+    "headcount": 6,
+    "budget": 41750,
+    "performance": 41,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-1-department-1-team-2",
+    "name": "Команда 1.1.2",
+    "parentId": "division-1-department-1",
+    "headcount": 7,
+    "budget": 42000,
+    "performance": 48,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-1-department-1-team-3",
+    "name": "Команда 1.1.3",
+    "parentId": "division-1-department-1",
+    "headcount": 8,
+    "budget": 42250,
+    "performance": 55,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-1-department-1-team-4",
+    "name": "Команда 1.1.4",
+    "parentId": "division-1-department-1",
+    "headcount": 9,
+    "budget": 42500,
+    "performance": 62,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-1-department-2",
+    "name": "Отдел 1.2",
+    "parentId": "division-1",
+    "headcount": 33,
+    "budget": 270000,
+    "performance": 45,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-1-department-2-team-1",
+    "name": "Команда 1.2.1",
+    "parentId": "division-1-department-2",
+    "headcount": 6,
+    "budget": 42250,
+    "performance": 52,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-1-department-2-team-2",
+    "name": "Команда 1.2.2",
+    "parentId": "division-1-department-2",
+    "headcount": 7,
+    "budget": 42500,
+    "performance": 59,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-1-department-2-team-3",
+    "name": "Команда 1.2.3",
+    "parentId": "division-1-department-2",
+    "headcount": 8,
+    "budget": 42750,
+    "performance": 66,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-1-department-2-team-4",
+    "name": "Команда 1.2.4",
+    "parentId": "division-1-department-2",
+    "headcount": 9,
+    "budget": 43000,
+    "performance": 73,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-2",
+    "name": "Дивизион 2",
+    "parentId": null,
+    "headcount": 140,
+    "budget": 1200000,
+    "performance": 34,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-2-department-1",
+    "name": "Отдел 2.1",
+    "parentId": "division-2",
+    "headcount": 33,
+    "budget": 275000,
+    "performance": 51,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-2-department-1-team-1",
+    "name": "Команда 2.1.1",
+    "parentId": "division-2-department-1",
+    "headcount": 6,
+    "budget": 42750,
+    "performance": 64,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-2-department-1-team-2",
+    "name": "Команда 2.1.2",
+    "parentId": "division-2-department-1",
+    "headcount": 7,
+    "budget": 43000,
+    "performance": 71,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-2-department-1-team-3",
+    "name": "Команда 2.1.3",
+    "parentId": "division-2-department-1",
+    "headcount": 8,
+    "budget": 43250,
+    "performance": 78,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-2-department-1-team-4",
+    "name": "Команда 2.1.4",
+    "parentId": "division-2-department-1",
+    "headcount": 9,
+    "budget": 43500,
+    "performance": 85,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-2-department-2",
+    "name": "Отдел 2.2",
+    "parentId": "division-2",
+    "headcount": 34,
+    "budget": 280000,
+    "performance": 64,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-2-department-2-team-1",
+    "name": "Команда 2.2.1",
+    "parentId": "division-2-department-2",
+    "headcount": 6,
+    "budget": 43250,
+    "performance": 75,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-2-department-2-team-2",
+    "name": "Команда 2.2.2",
+    "parentId": "division-2-department-2",
+    "headcount": 7,
+    "budget": 43500,
+    "performance": 82,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-2-department-2-team-3",
+    "name": "Команда 2.2.3",
+    "parentId": "division-2-department-2",
+    "headcount": 8,
+    "budget": 43750,
+    "performance": 89,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-2-department-2-team-4",
+    "name": "Команда 2.2.4",
+    "parentId": "division-2-department-2",
+    "headcount": 9,
+    "budget": 44000,
+    "performance": 96,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-3",
+    "name": "Дивизион 3",
+    "parentId": null,
+    "headcount": 150,
+    "budget": 1300000,
+    "performance": 51,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-3-department-1",
+    "name": "Отдел 3.1",
+    "parentId": "division-3",
+    "headcount": 34,
+    "budget": 285000,
+    "performance": 70,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-3-department-1-team-1",
+    "name": "Команда 3.1.1",
+    "parentId": "division-3-department-1",
+    "headcount": 6,
+    "budget": 43750,
+    "performance": 87,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-3-department-1-team-2",
+    "name": "Команда 3.1.2",
+    "parentId": "division-3-department-1",
+    "headcount": 7,
+    "budget": 44000,
+    "performance": 94,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-3-department-1-team-3",
+    "name": "Команда 3.1.3",
+    "parentId": "division-3-department-1",
+    "headcount": 8,
+    "budget": 44250,
+    "performance": 0,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-3-department-1-team-4",
+    "name": "Команда 3.1.4",
+    "parentId": "division-3-department-1",
+    "headcount": 9,
+    "budget": 44500,
+    "performance": 7,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-3-department-2",
+    "name": "Отдел 3.2",
+    "parentId": "division-3",
+    "headcount": 35,
+    "budget": 290000,
+    "performance": 83,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-3-department-2-team-1",
+    "name": "Команда 3.2.1",
+    "parentId": "division-3-department-2",
+    "headcount": 6,
+    "budget": 44250,
+    "performance": 98,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-3-department-2-team-2",
+    "name": "Команда 3.2.2",
+    "parentId": "division-3-department-2",
+    "headcount": 7,
+    "budget": 44500,
+    "performance": 4,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-3-department-2-team-3",
+    "name": "Команда 3.2.3",
+    "parentId": "division-3-department-2",
+    "headcount": 8,
+    "budget": 44750,
+    "performance": 11,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-3-department-2-team-4",
+    "name": "Команда 3.2.4",
+    "parentId": "division-3-department-2",
+    "headcount": 9,
+    "budget": 45000,
+    "performance": 18,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-4",
+    "name": "Дивизион 4",
+    "parentId": null,
+    "headcount": 160,
+    "budget": 1400000,
+    "performance": 68,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-4-department-1",
+    "name": "Отдел 4.1",
+    "parentId": "division-4",
+    "headcount": 35,
+    "budget": 295000,
+    "performance": 89,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-4-department-1-team-1",
+    "name": "Команда 4.1.1",
+    "parentId": "division-4-department-1",
+    "headcount": 6,
+    "budget": 44750,
+    "performance": 9,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-4-department-1-team-2",
+    "name": "Команда 4.1.2",
+    "parentId": "division-4-department-1",
+    "headcount": 7,
+    "budget": 45000,
+    "performance": 16,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-4-department-1-team-3",
+    "name": "Команда 4.1.3",
+    "parentId": "division-4-department-1",
+    "headcount": 8,
+    "budget": 45250,
+    "performance": 23,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-4-department-1-team-4",
+    "name": "Команда 4.1.4",
+    "parentId": "division-4-department-1",
+    "headcount": 9,
+    "budget": 45500,
+    "performance": 30,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-4-department-2",
+    "name": "Отдел 4.2",
+    "parentId": "division-4",
+    "headcount": 36,
+    "budget": 300000,
+    "performance": 1,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-4-department-2-team-1",
+    "name": "Команда 4.2.1",
+    "parentId": "division-4-department-2",
+    "headcount": 6,
+    "budget": 45250,
+    "performance": 20,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-4-department-2-team-2",
+    "name": "Команда 4.2.2",
+    "parentId": "division-4-department-2",
+    "headcount": 7,
+    "budget": 45500,
+    "performance": 27,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-4-department-2-team-3",
+    "name": "Команда 4.2.3",
+    "parentId": "division-4-department-2",
+    "headcount": 8,
+    "budget": 45750,
+    "performance": 34,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "id": "division-4-department-2-team-4",
+    "name": "Команда 4.2.4",
+    "parentId": "division-4-department-2",
+    "headcount": 9,
+    "budget": 46000,
+    "performance": 41,
+    "updatedAt": "2026-01-01T00:00:00.000Z"
+  }
+]

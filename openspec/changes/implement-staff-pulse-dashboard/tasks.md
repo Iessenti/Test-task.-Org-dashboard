@@ -2,64 +2,67 @@
 
 ### Human decision gates
 
-- [ ] 1.1 Obtain human approval for the runtime DTO field types, validation library, and hierarchy-invariant policy listed under “Before Foundation implementation” in `design.md`; verify the approved choices are recorded in the appropriate planning artifact before dependent implementation starts.
-- [ ] 1.2 Obtain human approval for the normalized index representation (`Map` or `Record`) and semantic-equality strategy; verify the choice remains compatible with ADR 001 and ADR 002 before normalization or cache reconciliation is implemented.
-- [ ] 1.3 Obtain human approval for the non-inline styling approach, the meaning of “second level open by default,” and the accessible performance-indicator mapping; verify the expected initial tree and non-color cue are explicit before tree UI work starts.
-- [ ] 1.4 Obtain human approval for TanStack Query retry and stale-revalidation triggers; verify the policy preserves the required five-second stale time, shared request ownership, and SWR behavior before the query client is configured.
+- [x] 1.1 Obtain human approval for the runtime DTO field types, validation library, and hierarchy-invariant policy listed under “Before Foundation implementation” in `design.md`; verify the approved choices are recorded in the appropriate planning artifact before dependent implementation starts.
+- [x] 1.2 Obtain human approval for the normalized index representation (`Map` or `Record`) and semantic-equality strategy; verify the choice remains compatible with ADR 001 and ADR 002 before normalization or cache reconciliation is implemented.
+- [x] 1.3 Obtain human approval for the non-inline styling approach, the meaning of “second level open by default,” and the accessible performance-indicator mapping; verify the expected initial tree and non-color cue are explicit before tree UI work starts.
+- [x] 1.4 Obtain human approval for TanStack Query retry and stale-revalidation triggers; verify the policy preserves the required five-second stale time, shared request ownership, and SWR behavior before the query client is configured.
 
 ### Project and development baseline
 
-- [ ] 1.5 Scaffold the React, Vite, and TypeScript client with absolute imports and the minimal test, typecheck, lint, and build tooling needed by the mandatory stages; verify the starter client passes its focused test, typecheck, lint, and production build.
-- [ ] 1.6 Establish the independently running `node:http` mock-server boundary, Vite API proxy, and one-command local development path; verify the client reaches the server through the proxy without browser CORS configuration.
-- [ ] 1.7 Apply the approved non-inline styling foundation without adding authentication, a database, or a UI component library; verify repository inspection and linting find no inline CSS or excluded system.
-- [ ] 1.8 Run a baseline checkpoint for client start, server start, proxy routing, typecheck, lint, tests, and build; record any baseline failure before organization behavior is added.
+- [x] 1.5 Scaffold the React, Vite, and TypeScript client with absolute imports and the minimal test, typecheck, lint, and build tooling needed by the mandatory stages; verify the starter client passes its focused test, typecheck, lint, and production build.
+- [x] 1.6 Establish the independently running `node:http` mock-server boundary, Vite API proxy, and one-command local development path; verify the client reaches the server through the proxy without browser CORS configuration.
+- [x] 1.7 Apply the approved non-inline styling foundation without adding authentication, a database, or a UI component library; verify repository inspection and linting find no inline CSS or excluded system.
+- [x] 1.8 Run a baseline checkpoint for client start, server start, proxy routing, typecheck, lint, tests, and build; record any baseline failure before organization behavior is added.
 
 ### Organization endpoint
 
-- [ ] 1.9 Add a deterministic flat organization fixture with at least 40 nodes and at least three hierarchy levels; verify a targeted fixture test checks unique ids, required fields, parent references, depth, approved numeric constraints, and `performance` values from 0 through 100.
-- [ ] 1.10 Expose the fixture from `GET /api/org-tree` with explicit JSON, status, and error handling; verify a focused server/API test observes the required flat response contract.
+- [x] 1.9 Add a deterministic flat organization fixture with at least 40 nodes and at least three hierarchy levels; verify a targeted fixture test checks unique ids, required fields, parent references, depth, approved numeric constraints, and `performance` values from 0 through 100.
+- [x] 1.10 Expose the fixture from `GET /api/org-tree` with explicit JSON, status, and error handling; verify a focused server/API test observes the required flat response contract.
 
 ### Validation and topology snapshot
 
-- [ ] 1.11 Implement runtime validation of the approved DTO field types, including acceptance of an empty array and rejection of malformed fields or out-of-range metrics; verify targeted validator tests cover valid, empty, and representative invalid payloads.
-- [ ] 1.12 Implement the approved hierarchy-invariant validation for the flat DTO collection; verify targeted tests cover duplicate ids, missing parents, cycles, and every other approved invalid topology case.
-- [ ] 1.13 Normalize a validated collection into the ADR-001 Foundation snapshot with one canonical node per id and stable root/child indexes, without Core aggregates; verify targeted tests cover traversal, multiple branches, input-order preservation where required, and the approved root policy.
-- [ ] 1.14 Compose validation and normalization as an atomic acceptance boundary from `unknown` payload to `OrgSnapshot`; verify invalid input never produces or replaces a publishable snapshot.
+- [x] 1.11 Implement runtime validation of the approved DTO field types, including acceptance of an empty array and rejection of malformed fields or out-of-range metrics; verify targeted validator tests cover valid, empty, and representative invalid payloads.
+- [x] 1.12 Implement the approved hierarchy-invariant validation for the flat DTO collection; verify targeted tests cover duplicate ids, missing parents, cycles, and every other approved invalid topology case.
+- [x] 1.13 Normalize a validated collection into the ADR-001 Foundation snapshot with one canonical node per id and stable root/child indexes, without Core aggregates; verify targeted tests cover traversal, multiple branches, input-order preservation where required, and the approved root policy.
+- [x] 1.14 Compose validation and normalization as an atomic acceptance boundary from `unknown` payload to `OrgSnapshot`; verify invalid input never produces or replaces a publishable snapshot.
 
 ### Shared cached organization resource
 
-- [ ] 1.15 Implement the organization fetch boundary with HTTP and JSON failure handling and the TanStack Query-provided `AbortSignal`; verify focused tests distinguish transport, HTTP, parsing, validation, and cancellation outcomes.
-- [ ] 1.16 Configure the single query-owned organization resource with the approved retry/refetch policy and a five-second stale time; verify a targeted cache test shows fresh data is reused without another GET.
-- [ ] 1.17 Implement shared in-flight deduplication and stale-while-revalidate presentation for the organization query; verify targeted tests show concurrent consumers share one GET and stale data remains available during one background revalidation.
-- [ ] 1.18 Implement observer-aware cancellation through query ownership; verify targeted tests show one departing observer does not cancel a shared request and the final departing observer aborts it without publishing a normal success or failure.
-- [ ] 1.19 Reconcile successful full responses by approved semantic equality, retaining the current snapshot and topology identities for unchanged data and atomically replacing them for changed data; verify focused identity tests cover both no-op and changed responses.
-- [ ] 1.20 Verify the complete resource pipeline from unknown HTTP payload to cached normalized snapshot, including invalid revalidation over existing valid data; confirm invalid data is exposed as an error and never becomes the current snapshot.
+- [x] 1.15 Implement the organization fetch boundary with HTTP and JSON failure handling and the TanStack Query-provided `AbortSignal`; verify focused tests distinguish transport, HTTP, parsing, validation, and cancellation outcomes.
+- [x] 1.16 Configure the single query-owned organization resource with the approved retry/refetch policy and a five-second stale time; verify a targeted cache test shows fresh data is reused without another GET.
+- [x] 1.17 Implement shared in-flight deduplication and stale-while-revalidate presentation for the organization query; verify targeted tests show concurrent consumers share one GET and stale data remains available during one background revalidation.
+- [x] 1.18 Implement observer-aware cancellation through query ownership; verify targeted tests show one departing observer does not cancel a shared request and the final departing observer aborts it without publishing a normal success or failure.
+- [x] 1.19 Reconcile successful full responses by approved semantic equality, retaining the current snapshot and topology identities for unchanged data and atomically replacing them for changed data; verify focused identity tests cover both no-op and changed responses.
+- [x] 1.20 Verify the complete resource pipeline from unknown HTTP payload to cached normalized snapshot, including invalid revalidation over existing valid data; confirm invalid data is exposed as an error and never becomes the current snapshot.
 
 ### Foundation dashboard and tree
 
-- [ ] 1.21 Implement distinct initial loading, error, and valid-empty dashboard states driven directly by the query resource; verify focused component tests cover transport, HTTP, parsing, validation, and empty outcomes without mirroring server data in local state.
-- [ ] 1.22 Render the normalized hierarchy as a tree with the approved initial expansion interpretation; verify a component test proves the required second hierarchy level is visible on first display.
-- [ ] 1.23 Add accessible expand/collapse controls for branches while keeping expansion as client interaction state; verify keyboard and pointer interaction tests cover expanding, collapsing, and leaf behavior.
-- [ ] 1.24 Present each visible node’s name, raw headcount, and approved accessible performance indicator; verify component assertions and a browser check confirm the meaning is not conveyed by color alone.
-- [ ] 1.25 Run a Foundation UI checkpoint in the browser for loading, error, empty, initial tree, expansion, collapse, and node content; record observable results before stage documentation and review.
+- [x] 1.21 Implement distinct initial loading, error, and valid-empty dashboard states driven directly by the query resource; verify focused component tests cover transport, HTTP, parsing, validation, and empty outcomes without mirroring server data in local state.
+- [x] 1.21a Refine the already implemented request-state presentation with a general initial loading spinner/message, an initial error retry action, and non-blocking background revalidation status/failure feedback; verify focused browser/component checks keep a valid snapshot usable during revalidation and failure.
+- [x] 1.22 Render the normalized hierarchy as a tree with the approved initial expansion interpretation; verify a component test proves the required second hierarchy level is visible on first display.
+- [x] 1.23 Add accessible expand/collapse controls for branches while keeping expansion as client interaction state; verify keyboard and pointer interaction tests cover expanding, collapsing, and leaf behavior.
+- [x] 1.24 Present each visible node’s name, raw headcount, and approved accessible performance indicator; verify component assertions and a browser check confirm the meaning is not conveyed by color alone.
+- [x] 1.24a Replace the historical nested-list tree presentation with the approved automatically laid out top-down canvas, metric cards, and directed connections while preserving accessible branch controls and the initial two-level visibility; verify a focused browser check observes the canvas hierarchy and independent expansion.
+- [x] 1.24b Add deterministic canvas navigation with zoom, pan, `+`, `-`, `Fit view`, and `Reset` controls while keeping node positions automatic; verify browser interactions change only the viewport and keep connections usable.
+- [x] 1.25 Run a Foundation UI checkpoint in the browser for loading, error, empty, initial canvas, zoom/pan, expansion, collapse, connections, and card content; record observable results before stage documentation and review.
 
 ### Foundation documentation and stage closure
 
-- [ ] 1.26 Update `README.md`, `docs/architecture.md`, and `docs/data-model.md` with the verified startup path, current API-to-tree flow, validation boundary, and normalized hierarchy invariants; verify the documents describe only Foundation contracts actually implemented.
-- [ ] 1.27 Audit every Foundation requirement and acceptance scenario against implementation and evidence, then run the relevant targeted tests plus stage-level typecheck, lint, build, and browser verification; record any unmet scenario instead of marking the stage complete.
-- [ ] 1.28 Obtain an independent read-only Foundation review from a reviewer/context that did not author the implementation, covering the actual repository, requirements, evidence, correctness, cache/cancellation behavior, accessibility, and stage scope; record findings with P0/P1/P2/Nit severity without modifying code during review.
-- [ ] 1.29 Fix only the Foundation review findings accepted by the human, adding focused regression coverage for correctness defects; verify each accepted finding is resolved and document any explicitly deferred P2/Nit item.
-- [ ] 1.30 Run the final Foundation verification suite and scenario audit after fixes; verify no known P0/P1 finding remains and inspect the final diff for accidental Core, Polish, or Bonus scope.
-- [ ] 1.31 Prepare and create the independently reviewable Foundation commit `Step/1` and tag `step/1`; verify the tag resolves to that commit and the application starts and passes the Foundation checks from the tagged state.
+- [x] 1.26 Update `README.md`, `docs/architecture.md`, and `docs/data-model.md` with the verified startup path, current API-to-canvas flow, validation boundary, and normalized hierarchy invariants; verify the documents describe only Foundation contracts actually implemented.
+- [x] 1.27 Audit every Foundation requirement and acceptance scenario against implementation and evidence, then run the relevant targeted tests plus stage-level typecheck, lint, build, and browser verification; record any unmet scenario instead of marking the stage complete.
+- [x] 1.28 Obtain an independent read-only Foundation review from a reviewer/context that did not author the implementation, covering the actual repository, requirements, evidence, correctness, cache/cancellation behavior, accessibility, and stage scope; record findings with P0/P1/P2/Nit severity without modifying code during review.
+- [x] 1.29 Fix only the Foundation review findings accepted by the human, adding focused regression coverage for correctness defects; verify each accepted finding is resolved and document any explicitly deferred P2/Nit item.
+- [x] 1.30 Run the final Foundation verification suite and scenario audit after fixes; verify no known P0/P1 finding remains and inspect the final diff for accidental Core, Polish, or Bonus scope.
+- [x] 1.31 Prepare and create the independently reviewable Foundation commit `Step/1` and tag `step/1`; verify the tag resolves to that commit and the application starts and passes the Foundation checks from the tagged state.
 
 ## 2. Core
 
 ### Human decision gates
 
-- [ ] 2.1 Obtain human approval for toggle-only versus responsive split-view presentation and for numeric versus labeled Level values; verify both choices are explicit before table layout and row projection work starts.
-- [ ] 2.2 Obtain human approval for the sort activation states and the exact single-click/double-click interaction; verify the resulting state transitions satisfy deterministic sorting and the required double-click reversal.
-- [ ] 2.3 Obtain human approval for name-matching rules and whether filtered results retain contextual ancestors; verify the expected row set is explicit before filter implementation starts.
-- [ ] 2.4 Obtain human approval for hidden-node selection behavior, including ancestor expansion and scrolling; verify table-to-tree reveal behavior is explicit before shared selection is wired.
+- [x] 2.1 Obtain human approval for the `Карта / Таблица` mode switch, canvas-first initial presentation, and labeled Level values; verify both choices are explicit before table layout and row projection work starts.
+- [x] 2.2 Obtain human approval for three-state sorting and the exact single-click/double-click interaction; verify the resulting state transitions satisfy deterministic sorting and the required double-click reversal.
+- [x] 2.3 Obtain human approval for case-insensitive substring matching and retaining contextual ancestors; verify the expected row set is explicit before filter implementation starts.
+- [x] 2.4 Obtain human approval for expanding ancestors and scrolling/centering a selected hidden node; verify table-to-canvas reveal behavior is explicit before shared selection is wired.
 
 ### Initial aggregation
 
@@ -70,7 +73,7 @@
 
 ### Analytical table projection
 
-- [ ] 2.9 Implement the approved tree/table presentation access model without duplicating query-owned organization data; verify a browser interaction can reach both representations at the relevant viewport sizes.
+- [ ] 2.9 Implement the approved canvas-first `Карта / Таблица` mode switch without duplicating query-owned organization data; verify a browser interaction can reach both representations and returns to the canvas as the initial mode after reload.
 - [ ] 2.10 Derive one analytical row per organization node with subdivision, approved level, total employees, total budget, and average performance; verify a focused table test covers all nodes and all five required columns.
 - [ ] 2.11 Format aggregate budgets as grouped digits followed by `руб.` and zero-headcount averages as `—`; verify deterministic formatter/component cases include `12 345 678 руб.` and the zero-denominator result.
 
@@ -82,13 +85,14 @@
 
 ### Shared selection
 
-- [ ] 2.15 Add id-based shared selection between table and tree without storing node objects or row indexes; verify selecting a table row selects the same node after sorting or filtering changes row positions.
-- [ ] 2.16 Implement the approved reveal behavior for a selected node hidden by tree collapse or presentation mode; verify focused browser/component checks cover ancestor expansion, scrolling, and visible selection only as approved.
-- [ ] 2.17 Run a Core interaction checkpoint for representation access, all table columns, aggregate values, budget/average formatting, sorting, debounce filtering, and table-to-tree selection; record failures before stage documentation and review.
+- [ ] 2.16 Implement the approved id-based shared selection between table and canvas without storing node objects or row indexes; verify selection survives mode switches, sorting, and filtering changes row positions.
+- [ ] 2.16a Implement the approved canvas detail panel with separate raw and aggregate metrics, child list, and update time; verify the panel is visible for a selected canvas card, hidden in table mode, and does not clear shared selection.
+- [ ] 2.16b Implement the approved reveal behavior for a selected node hidden by collapsed canvas ancestors; verify focused browser/component checks cover ancestor expansion, scrolling/centering, and visible selection only as approved.
+- [ ] 2.17 Run a Core interaction checkpoint for representation access, all table columns, aggregate values, budget/average formatting, sorting, debounce filtering, table-to-canvas selection, detail panel behavior, and hidden-node reveal; record failures before stage documentation and review.
 
 ### Core documentation and stage closure
 
-- [ ] 2.18 Update `docs/architecture.md` and `docs/data-model.md` with the implemented table projection, shared selection flow, aggregation equations, zero-headcount rule, and accurate initial/incremental complexity promises; verify the text agrees with ADR 001 and the implementation.
+- [ ] 2.18 Update `docs/architecture.md` and `docs/data-model.md` with the implemented table projection, canvas/detail presentation, shared selection flow, aggregation equations, zero-headcount rule, and accurate initial/incremental complexity promises; verify the text agrees with ADR 001 and the implementation.
 - [ ] 2.19 Audit every Core acceptance scenario while rerunning all Foundation scenarios and the relevant aggregation, cache, table, and browser checks; record evidence that each newly accepted snapshot receives one full aggregation pass and ordinary rerenders reuse it.
 - [ ] 2.20 Obtain an independent read-only Core review from a reviewer/context that did not author the implementation, covering requirements, aggregation correctness, projection consistency, sorting/filtering, selection, accessibility, and stage scope; record severity-ranked findings without modifying code during review.
 - [ ] 2.21 Fix only the Core review findings accepted by the human and add focused regression coverage for correctness defects; verify each accepted finding is resolved and document any explicitly deferred P2/Nit item.
@@ -101,9 +105,10 @@
 
 - [ ] 3.1 Obtain human approval for WebSocket, SSE, or efficient polling and for the realtime patch envelope; verify the choice accounts for expected change frequency, metric-only scope, and server/client lifecycle before transport code starts.
 - [ ] 3.2 Obtain human approval for patch ordering, gap recovery, the in-flight GET-versus-newer-patch race, `updatedAt` semantics, and whether a patch renews whole-resource freshness; verify one coherent reconciliation policy is recorded before cache integration starts.
-- [ ] 3.3 Obtain human approval for connection-state labels and exponential-backoff cap/jitter policy; verify observable status transitions and deterministic retry expectations are explicit before connection UX work starts.
-- [ ] 3.4 Obtain human approval for the exact cells highlighted by direct and aggregate updates and for repeated updates during the 1.5-second fade; verify the visual feedback contract is explicit before update metadata is designed.
-- [ ] 3.5 Obtain human approval for the table focus model and exact Arrow/Home/End/Enter behavior; verify focus movement, boundaries, and Enter activation are explicit before keyboard handling starts.
+- [ ] 3.3 Obtain human approval for the exponential-backoff cap/jitter policy; verify deterministic retry expectations are explicit before reconnect logic starts.
+- [x] 3.3a Record the approved connection-state labels `Live`, `Reconnecting…`, and `Offline`; verify the labels are explicit before connection UX work starts.
+- [x] 3.4 Record the approved direct/aggregate cell feedback set and repeated-update behavior; verify only changed raw/affected aggregate values are highlighted and the approximately 1.5-second fade extends from the latest update.
+- [x] 3.5 Record the approved table focus model and Arrow/Home/End/Enter behavior; verify row focus movement, boundaries, and Enter activation are explicit before keyboard handling starts.
 - [ ] 3.6 Resolve how `docs/data-model.md` will satisfy the assignment’s literal WebSocket-patch wording if another approved transport is selected; verify the documentation obligation is explicit without changing the selected transport.
 
 ### Realtime server
@@ -128,9 +133,9 @@
 
 ### Realtime feedback
 
-- [ ] 3.18 Derive the approved set of directly and aggregately affected visible table cells from each applied transition; verify focused tests cover target rows, ancestor rows, hidden rows, unchanged values, and unrelated branches.
-- [ ] 3.19 Implement approximately 1.5-second fade-out feedback with the approved repeated-update behavior; verify fake-timer and browser checks cover start, repeat, and expiration without stale timers marking current values.
-- [ ] 3.20 Run a realtime checkpoint from server event through validation, cache transition, incremental aggregate update, both UI projections, header status, and cell feedback; record evidence that no full refetch occurs solely because a patch arrived.
+- [ ] 3.18 Derive the approved set of changed raw metrics and affected aggregate values on the target and ancestor rows/cards from each applied transition; verify focused tests cover target rows, ancestor rows, hidden rows, unchanged values, and unrelated branches.
+- [ ] 3.19 Implement approximately 1.5-second fade-out feedback with the approved repeated-update extension behavior; verify fake-timer and browser checks cover start, repeat, and expiration without stale timers marking current values.
+- [ ] 3.20 Run a realtime checkpoint from server event through validation, cache transition, incremental aggregate update, both UI projections, header status, non-blocking connection state, and targeted cell/card feedback; record evidence that no full refetch occurs solely because a patch arrived.
 
 ### Keyboard and tree motion
 
@@ -164,6 +169,7 @@ not applicable; they do not block completion or delivery of Foundation, Core, or
 
 - [ ] 4.1 After the mandatory `step/3` state is complete, obtain the human decision whether to undertake Bonus; verify the decision is recorded without changing the completion status of any mandatory stage.
 - [ ] 4.2 If Bonus is approved, obtain human approval for container/deployment topology, `.env` configuration boundary, accepted gzip measurement scope, and AI provider or local interpretation strategy; verify the approved design introduces no prerequisite for mandatory behavior before Bonus implementation starts.
+- [ ] 4.2a If Bonus is approved, obtain human approval for mobile-specific canvas/table presentation and responsive card/table behavior; verify the responsive design remains isolated from mandatory stage scope.
 
 ### Containerized production delivery
 
