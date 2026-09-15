@@ -2,17 +2,17 @@
 
 ### Human decision gates
 
-- [ ] 1.1 Obtain human approval for the runtime DTO field types, validation library, and hierarchy-invariant policy listed under “Before Foundation implementation” in `design.md`; verify the approved choices are recorded in the appropriate planning artifact before dependent implementation starts.
-- [ ] 1.2 Obtain human approval for the normalized index representation (`Map` or `Record`) and semantic-equality strategy; verify the choice remains compatible with ADR 001 and ADR 002 before normalization or cache reconciliation is implemented.
-- [ ] 1.3 Obtain human approval for the non-inline styling approach, the meaning of “second level open by default,” and the accessible performance-indicator mapping; verify the expected initial tree and non-color cue are explicit before tree UI work starts.
-- [ ] 1.4 Obtain human approval for TanStack Query retry and stale-revalidation triggers; verify the policy preserves the required five-second stale time, shared request ownership, and SWR behavior before the query client is configured.
+- [x] 1.1 Obtain human approval for the runtime DTO field types, validation library, and hierarchy-invariant policy listed under “Before Foundation implementation” in `design.md`; verify the approved choices are recorded in the appropriate planning artifact before dependent implementation starts.
+- [x] 1.2 Obtain human approval for the normalized index representation (`Map` or `Record`) and semantic-equality strategy; verify the choice remains compatible with ADR 001 and ADR 002 before normalization or cache reconciliation is implemented.
+- [x] 1.3 Obtain human approval for the non-inline styling approach, the meaning of “second level open by default,” and the accessible performance-indicator mapping; verify the expected initial tree and non-color cue are explicit before tree UI work starts.
+- [x] 1.4 Obtain human approval for TanStack Query retry and stale-revalidation triggers; verify the policy preserves the required five-second stale time, shared request ownership, and SWR behavior before the query client is configured.
 
 ### Project and development baseline
 
-- [ ] 1.5 Scaffold the React, Vite, and TypeScript client with absolute imports and the minimal test, typecheck, lint, and build tooling needed by the mandatory stages; verify the starter client passes its focused test, typecheck, lint, and production build.
-- [ ] 1.6 Establish the independently running `node:http` mock-server boundary, Vite API proxy, and one-command local development path; verify the client reaches the server through the proxy without browser CORS configuration.
-- [ ] 1.7 Apply the approved non-inline styling foundation without adding authentication, a database, or a UI component library; verify repository inspection and linting find no inline CSS or excluded system.
-- [ ] 1.8 Run a baseline checkpoint for client start, server start, proxy routing, typecheck, lint, tests, and build; record any baseline failure before organization behavior is added.
+- [x] 1.5 Scaffold the React, Vite, and TypeScript client with absolute imports and the minimal test, typecheck, lint, and build tooling needed by the mandatory stages; verify the starter client passes its focused test, typecheck, lint, and production build.
+- [x] 1.6 Establish the independently running `node:http` mock-server boundary, Vite API proxy, and one-command local development path; verify the client reaches the server through the proxy without browser CORS configuration.
+- [x] 1.7 Apply the approved non-inline styling foundation without adding authentication, a database, or a UI component library; verify repository inspection and linting find no inline CSS or excluded system.
+- [x] 1.8 Run a baseline checkpoint for client start, server start, proxy routing, typecheck, lint, tests, and build; record any baseline failure before organization behavior is added.
 
 ### Organization endpoint
 

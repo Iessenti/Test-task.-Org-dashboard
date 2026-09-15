@@ -181,17 +181,38 @@ must be reviewed before their dependent implementation begins:
 
 ### Before Foundation implementation
 
-- Concrete runtime-validation library and the exact accepted DTO field types
-  and hierarchy validation policy.
-- `Map` versus JSON-compatible `Record` for normalized indexes, including the
-  semantic equality strategy used for no-op revalidation.
-- Styling approach: whether to use the optional styled-components preference or
-  another non-inline approach.
-- TanStack Query retry policy and stale revalidation triggers such as mount,
-  focus, and browser reconnect.
-- Exact interpretation of “second level open by default.”
-- Performance-indicator color mapping and how its meaning remains perceivable
-  without relying on color alone.
+- **Resolved 2026-09-15 — runtime validation.** Use Zod. The accepted DTO
+  types are `id`, `name`, and `updatedAt` as strings; `parentId` as
+  `string | null`; `headcount` as an integer `>= 0`; `budget` as a finite
+  number `>= 0`; and `performance` as a number in the inclusive range
+  `0..100`. An empty collection is valid. Hierarchy validation allows a
+  forest with multiple roots, requires every non-root parent to exist, and
+  rejects duplicate ids, missing parents, cycles, and nodes that do not
+  belong to exactly one root.
+- **Resolved 2026-09-15 — normalized indexes and equality.** Use JSON-compatible
+  `Record<string, ...>` values for normalized indexes. Compare validated full
+  responses by node `id` and all DTO field values, independently of input
+  array order. A permutation of otherwise identical nodes is a semantic no-op;
+  additions, removals, or field changes require a replacement snapshot. A
+  no-op retains the current snapshot and topology indexes. This preserves the
+  single canonical snapshot required by ADR 001 and the query-owned immutable
+  resource and no-op reconciliation required by ADR 002.
+- **Resolved 2026-09-15 — styling and initial tree.** Use `styled-components`
+  for non-inline styling. “Second level open by default” means roots and their
+  direct children are visible initially; deeper descendants remain collapsed
+  until their branch is expanded.
+- **Resolved 2026-09-15 — performance indicator.** Use bands `0..49` (low),
+  `50..79` (medium), and `80..100` (high). The color indicator is accompanied
+  by a textual band label and the numeric performance value, so meaning does
+  not rely on color alone.
+- **Resolved 2026-09-15 — TanStack Query policy.** Use a `5000 ms` stale time
+  and retry once only for transport errors and HTTP `5xx` responses. Do not
+  retry HTTP `4xx`, JSON parsing, runtime-validation, or `AbortError` failures.
+  Enable refetch on mount, window focus, and browser reconnect only when the
+  cached data is stale; do not use a polling interval. Keep the stale snapshot
+  available during background revalidation. This preserves shared query
+  ownership, SWR behavior, and the five-second freshness requirement from
+  ADR 002.
 
 ### Before Core implementation
 
