@@ -200,6 +200,15 @@ Do not mark something as verified when it was only inferred.
 
 ---
 
+## React implementation
+
+All React implementation must follow `docs/development/react-guidelines.md`.
+
+These guidelines are implementation constraints, not product requirements.
+If a guideline conflicts with an explicit OpenSpec requirement, accepted ADR, or approved product behavior, do not silently resolve the conflict. Escalate it.
+
+---
+
 ## Review policy
 
 Implementation and review are different roles.

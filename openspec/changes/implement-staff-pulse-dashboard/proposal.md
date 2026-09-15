@@ -11,14 +11,16 @@ delivery discipline.
 - Add a React, Vite, and TypeScript client and a mock organization server whose
   validated flat dataset contains at least 40 nodes and at least three hierarchy
   levels.
-- Add a cached organization tree with required request states, five-second
-  freshness, request cancellation, and expand/collapse behavior.
+- Add a cached organization tree presented as a top-down, automatically laid
+  out canvas with metric cards, directed connections, zoom/pan controls,
+  required request states, five-second freshness, request cancellation, and
+  expand/collapse behavior.
 - Add an analytical table with memoized descendant aggregates, weighted
-  performance, sorting, debounced filtering, formatted budgets, and shared node
-  selection with the tree.
+  performance, labeled hierarchy levels, three-state sorting, contextual name
+  filtering, formatted budgets, and shared node selection with the canvas.
 - Add realtime metric updates for existing nodes, incremental ancestor-only
-  aggregate recomputation, connection UX, keyboard navigation, and
-  reduced-motion-aware tree animation.
+  aggregate recomputation, non-blocking connection/update UX, targeted cell
+  feedback, keyboard navigation, and reduced-motion-aware tree animation.
 - Deliver each mandatory stage as an independently verified and reviewed state,
   with the required commits, tags, tests, screenshots, README disclosures, and
   architecture/data-model documentation.
@@ -49,6 +51,8 @@ None. The project has no existing capability specifications.
 - Uses the accepted normalized `OrgSnapshot` and aggregation model from ADR 001.
 - Uses TanStack Query as the single owner of cached server-derived state, as
   accepted in ADR 002; components do not mirror that state.
-- Leaves the realtime transport and unresolved interaction semantics to explicit
-  human decisions before their dependent implementation tasks begin.
+- Leaves the realtime transport and its protocol/order/recovery semantics to
+  explicit human decisions before their dependent implementation tasks begin.
+- Defers mobile-specific presentation and all optional Bonus behavior until the
+  Bonus decision gate after Polish.
 - Adds no authentication, database, or UI component library.

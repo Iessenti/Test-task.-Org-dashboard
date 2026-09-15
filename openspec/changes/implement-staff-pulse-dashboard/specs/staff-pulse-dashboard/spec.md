@@ -63,7 +63,9 @@ observing the request without cancelling work still required by the others.
 ### Requirement: Initial request states
 The dashboard SHALL present distinct loading, error, and empty states for the
 initial organization request. A valid empty array SHALL produce the empty state
-even though the standard mock fixture contains at least 40 nodes.
+even though the standard mock fixture contains at least 40 nodes. Loading SHALL
+use a general dashboard spinner and message, and an initial error SHALL offer a
+retry action.
 
 #### Scenario: Initial request is pending
 - **WHEN** the first organization request has not completed and no cached snapshot exists
@@ -71,34 +73,48 @@ even though the standard mock fixture contains at least 40 nodes.
 
 #### Scenario: Initial request fails
 - **WHEN** the initial request fails through transport, HTTP, parsing, or validation and no cached snapshot exists
-- **THEN** the dashboard presents its error state
+- **THEN** the dashboard presents its error state with a retry action
 
 #### Scenario: Valid response is empty
 - **WHEN** runtime validation accepts an empty organization array
 - **THEN** the dashboard presents its empty state
 
+#### Scenario: Background revalidation fails after data is visible
+- **WHEN** a background revalidation fails while a valid organization snapshot is already visible
+- **THEN** the dashboard keeps the existing data usable and presents a non-blocking update failure notice
+
+#### Scenario: Background revalidation runs after data is visible
+- **WHEN** a stale visible snapshot is being revalidated in the background
+- **THEN** the dashboard keeps the canvas or table usable and presents a non-blocking updating status
+
 ### Requirement: Interactive organization tree
-The Foundation dashboard SHALL render the organization hierarchy as a tree in
-which branches can be expanded and collapsed and the second hierarchy level is
-visible by default. Every displayed node SHALL show its name, headcount, and a
-color indicator derived from its performance.
+The Foundation dashboard SHALL render the organization hierarchy as a
+top-down, automatically laid out canvas tree in which branches can be expanded
+and collapsed and the second hierarchy level is visible by default. Every
+displayed node card SHALL show its name, raw headcount, raw budget, and
+performance as a numeric value, textual band, and color indicator.
 
 #### Scenario: Tree is first displayed
 - **WHEN** a non-empty organization snapshot is first rendered
-- **THEN** nodes on the second hierarchy level are visible and each visible node shows the required name, headcount, and performance indicator
+- **THEN** nodes on the second hierarchy level are visible as connected cards and each visible card shows the required name, raw headcount, raw budget, and performance indicator
 
 #### Scenario: User toggles a branch
 - **WHEN** the user activates the expand or collapse control for a node with children
 - **THEN** that node's descendant branch becomes visible or hidden accordingly
 
+#### Scenario: User navigates the organization canvas
+- **WHEN** the user zooms, pans, or activates a canvas view control
+- **THEN** the automatically laid out cards and their directed hierarchy connections remain usable without changing the organization data
+
 ### Requirement: Analytics table
 The Core dashboard SHALL provide an analytical table for all organization
-nodes with columns for subdivision, level, total employees, total budget, and
-average performance.
+nodes with columns for subdivision, labeled hierarchy level, total employees,
+total budget, and average performance. The table SHALL use a compact analytical
+layout with a persistent header while its rows are scrolled.
 
 #### Scenario: Table is displayed
 - **WHEN** the user opens the table representation for a non-empty snapshot
-- **THEN** every organization node is represented by a row with all five required columns
+- **THEN** every organization node is represented by a compact row with all five required columns and a level label such as `Дивизион`, `Отдел`, or `Команда`
 
 ### Requirement: Descendant aggregation
 For each node, total employees and total budget MUST include the node's own raw
@@ -119,28 +135,50 @@ The complete set of aggregates MUST be calculated once for each newly accepted
 organization snapshot and reused while its underlying data remains unchanged.
 
 #### Scenario: Dashboard rerenders without a data change
-- **WHEN** the tree or table rerenders while the accepted organization snapshot is unchanged
+- **WHEN** the canvas or table rerenders while the accepted organization snapshot is unchanged
 - **THEN** the client reuses the existing aggregates rather than running another complete aggregation
 
 ### Requirement: Tree and table presentation access
-The dashboard SHALL make the tree and table available either through a
-`Дерево / Таблица` mode switch or through a split view at viewport widths of at
-least 1280 pixels.
+The dashboard SHALL make the top-down canvas and analytical table available
+through a `Карта / Таблица` mode switch. The canvas is the primary presentation
+when the dashboard is opened.
 
 #### Scenario: User accesses both representations
 - **WHEN** the dashboard has loaded organization data
-- **THEN** the selected presentation model allows the user to inspect both the tree and the analytical table
+- **THEN** the user can inspect the canvas and analytical table through the mode switch, with the canvas selected initially
 
 ### Requirement: Shared node selection
-Selecting a table row SHALL select the same node in the tree.
+Selecting a table row SHALL select the same node in the canvas. Selection SHALL
+be represented by the organization node identity and SHALL survive switching
+presentations, sorting, and filtering.
 
 #### Scenario: User selects a table row
 - **WHEN** the user activates a row for an organization node
-- **THEN** the corresponding tree node is visibly selected when the tree representation is shown
+- **THEN** the corresponding canvas card is visibly selected when the canvas representation is shown
+
+#### Scenario: Selected node is hidden by a collapsed canvas branch
+- **WHEN** the user selects a table row whose canvas node is hidden by collapsed ancestors
+- **THEN** the canvas expands the required ancestors and scrolls or centers the selected card into view
+
+### Requirement: Canvas detail presentation
+When a canvas node is selected, the dashboard SHALL provide a detail panel
+showing the node's raw metrics, aggregate subtree metrics, child nodes, and
+last update time. The detail panel SHALL be hidden in table mode without
+clearing the shared node selection.
+
+#### Scenario: User selects a canvas card
+- **WHEN** the user activates a canvas card
+- **THEN** the dashboard opens a detail panel containing separate raw and aggregate metrics, the selected node's children, and its last update time
+
+#### Scenario: User switches to the table
+- **WHEN** the user switches from the canvas to the table while a node is selected
+- **THEN** the detail panel is hidden and the corresponding table row remains selected
 
 ### Requirement: Table sorting
-The user SHALL be able to sort the table by any column and reverse the active
-sort direction by double-clicking its column control.
+The user SHALL be able to sort the table by any column. A column sort SHALL
+cycle through ascending, descending, and cleared/default ordering. A
+double-click on the currently active column control SHALL reverse its active
+direction.
 
 #### Scenario: User sorts a column
 - **WHEN** the user activates the sort control for any table column
@@ -150,13 +188,19 @@ sort direction by double-clicking its column control.
 - **WHEN** the user double-clicks the control for the currently sorted column
 - **THEN** the table reverses the active ordering for that column
 
+#### Scenario: User clears table sorting
+- **WHEN** the user activates a currently descending column sort control according to the table's sort cycle
+- **THEN** the table returns to its deterministic default ordering and exposes that no column sort is active
+
 ### Requirement: Debounced name filtering
 The table SHALL filter organization nodes by name in response to user input,
-applying the latest input 250 milliseconds after the user stops changing it.
+using case-insensitive substring matching and applying the latest input 250
+milliseconds after the user stops changing it. Matching rows SHALL retain the
+ancestor rows needed to preserve hierarchy context.
 
 #### Scenario: User enters a name filter
 - **WHEN** the filter value remains unchanged for 250 milliseconds
-- **THEN** the table displays the rows that match the latest name filter without mutating source organization data
+- **THEN** the table displays matching rows and their contextual ancestors without mutating source organization data
 
 ### Requirement: Budget formatting
 Displayed table budgets SHALL use grouped digits followed by `руб.`, matching
@@ -207,12 +251,17 @@ remain unchanged.
 - **THEN** the canonical snapshot and aggregates remain unchanged
 
 ### Requirement: Updated-cell feedback
-Cells affected by an applied realtime update SHALL show a fade-out visual
-indication lasting approximately 1.5 seconds.
+Only the changed raw metric and affected aggregate values on the patched node
+and its ancestors SHALL show a fade-out visual indication lasting approximately
+1.5 seconds. Unchanged values and unrelated branches SHALL not be highlighted.
 
 #### Scenario: Visible cell value changes after a patch
 - **WHEN** an applied patch changes a value currently visible in the table
 - **THEN** the affected cell presents a change indication that fades out over approximately 1.5 seconds
+
+#### Scenario: Repeated patch updates an active indication
+- **WHEN** another accepted patch changes the same visible value before its previous indication has faded
+- **THEN** the indication remains active for approximately 1.5 seconds from the latest change
 
 ### Requirement: Realtime connection feedback
 The dashboard header SHALL display the current realtime connection status and
@@ -220,24 +269,26 @@ the client SHALL use exponential backoff after a connection interruption.
 
 #### Scenario: Realtime connection is interrupted
 - **WHEN** the selected realtime connection reports an interruption
-- **THEN** the header reflects the disconnected or reconnecting state and successive retry delays increase exponentially
+- **THEN** the header reflects `Live`, `Reconnecting…`, or `Offline` as appropriate and successive retry delays increase exponentially
 
 ### Requirement: Keyboard table navigation
 The analytical table SHALL support keyboard navigation using arrow keys,
-Home, End, and Enter.
+Home, End, and Enter. Arrow keys SHALL move focus between rows, Home and End
+SHALL move to the first and last available row, and Enter SHALL activate the
+focused row.
 
 #### Scenario: User navigates the table by keyboard
 - **WHEN** keyboard focus is within the table and the user presses an arrow key, Home, End, or Enter
 - **THEN** the table performs the defined navigation or activation behavior for that key without requiring pointer input
 
 ### Requirement: Motion preferences
-Tree expansion and collapse SHALL use a height transition when motion is
-allowed and SHALL respect the user's `prefers-reduced-motion` preference.
+Canvas branch expansion and collapse SHALL use a height transition when motion
+is allowed and SHALL respect the user's `prefers-reduced-motion` preference.
 
 #### Scenario: User allows motion
-- **WHEN** a branch is expanded or collapsed and reduced motion is not requested
+- **WHEN** a canvas branch is expanded or collapsed and reduced motion is not requested
 - **THEN** the branch uses a height transition
 
 #### Scenario: User requests reduced motion
-- **WHEN** a branch is expanded or collapsed while `prefers-reduced-motion` is active
+- **WHEN** a canvas branch is expanded or collapsed while `prefers-reduced-motion` is active
 - **THEN** the dashboard avoids the non-essential expansion animation
