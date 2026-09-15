@@ -71,7 +71,12 @@ export function normalizeOrgTree(nodes: readonly OrgNodeDto[]): OrgSnapshot {
     if (node.parentId === null) {
       rootIds.push(node.id);
     } else {
-      childrenByParentId[node.parentId].push(node.id);
+      const children = childrenByParentId[node.parentId];
+      if (children === undefined) {
+        throw new Error(`Cannot normalize missing parent: ${node.parentId}`);
+      }
+
+      children.push(node.id);
     }
   }
 
@@ -83,6 +88,10 @@ export function normalizeOrgTree(nodes: readonly OrgNodeDto[]): OrgSnapshot {
     }
 
     const node = nodesById[id];
+    if (node === undefined) {
+      throw new Error(`Cannot normalize unknown organization node: ${id}`);
+    }
+
     const depth = node.parentId === null ? 0 : getDepth(node.parentId) + 1;
     depthById[id] = depth;
     return depth;

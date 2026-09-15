@@ -28,12 +28,12 @@
 
 ### Shared cached organization resource
 
-- [ ] 1.15 Implement the organization fetch boundary with HTTP and JSON failure handling and the TanStack Query-provided `AbortSignal`; verify focused tests distinguish transport, HTTP, parsing, validation, and cancellation outcomes.
-- [ ] 1.16 Configure the single query-owned organization resource with the approved retry/refetch policy and a five-second stale time; verify a targeted cache test shows fresh data is reused without another GET.
-- [ ] 1.17 Implement shared in-flight deduplication and stale-while-revalidate presentation for the organization query; verify targeted tests show concurrent consumers share one GET and stale data remains available during one background revalidation.
-- [ ] 1.18 Implement observer-aware cancellation through query ownership; verify targeted tests show one departing observer does not cancel a shared request and the final departing observer aborts it without publishing a normal success or failure.
-- [ ] 1.19 Reconcile successful full responses by approved semantic equality, retaining the current snapshot and topology identities for unchanged data and atomically replacing them for changed data; verify focused identity tests cover both no-op and changed responses.
-- [ ] 1.20 Verify the complete resource pipeline from unknown HTTP payload to cached normalized snapshot, including invalid revalidation over existing valid data; confirm invalid data is exposed as an error and never becomes the current snapshot.
+- [x] 1.15 Implement the organization fetch boundary with HTTP and JSON failure handling and the TanStack Query-provided `AbortSignal`; verify focused tests distinguish transport, HTTP, parsing, validation, and cancellation outcomes.
+- [x] 1.16 Configure the single query-owned organization resource with the approved retry/refetch policy and a five-second stale time; verify a targeted cache test shows fresh data is reused without another GET.
+- [x] 1.17 Implement shared in-flight deduplication and stale-while-revalidate presentation for the organization query; verify targeted tests show concurrent consumers share one GET and stale data remains available during one background revalidation.
+- [x] 1.18 Implement observer-aware cancellation through query ownership; verify targeted tests show one departing observer does not cancel a shared request and the final departing observer aborts it without publishing a normal success or failure.
+- [x] 1.19 Reconcile successful full responses by approved semantic equality, retaining the current snapshot and topology identities for unchanged data and atomically replacing them for changed data; verify focused identity tests cover both no-op and changed responses.
+- [x] 1.20 Verify the complete resource pipeline from unknown HTTP payload to cached normalized snapshot, including invalid revalidation over existing valid data; confirm invalid data is exposed as an error and never becomes the current snapshot.
 
 ### Foundation dashboard and tree
 
