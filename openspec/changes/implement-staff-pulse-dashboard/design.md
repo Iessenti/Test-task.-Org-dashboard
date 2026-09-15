@@ -1,0 +1,226 @@
+## Context
+
+See `proposal.md` for motivation and the capability specs for observable
+behavior. This is a greenfield implementation constrained by the original
+four-stage assignment, a two-to-three-day scope, ADR 001, ADR 002, and the
+accepted metric-only realtime patch decision.
+
+The repository currently contains planning and decision records but no
+application implementation. Foundation must establish boundaries that support
+Core and Polish without implementing those later stages early.
+
+## Goals / Non-Goals
+
+**Goals:**
+
+- Keep one validated, normalized, internally consistent organization snapshot
+  from API through tree, table, and realtime updates.
+- Make hierarchy conversion, aggregation, cache reconciliation, and patch
+  application deterministic and independently testable.
+- Preserve the assignment's staged implementation and verification boundaries.
+- Prefer small explicit data flows over generalized graph, state, networking,
+  or design-system abstractions.
+
+**Non-Goals:**
+
+- Reconsidering the accepted data representation, aggregation, cache ownership,
+  or realtime mutation scope.
+- Adding authentication, persistence, user-driven organization editing, or
+  structural realtime mutations.
+- Selecting or designing the realtime transport before human review.
+- Designing or implementing the optional Bonus stage before mandatory work is
+  complete.
+
+## Decisions
+
+### Server and client remain explicit boundaries
+
+The repository will contain a Vite React TypeScript client and an independently
+started mock server. The server owns the flat API fixture and, in Polish, metric
+change generation. The client owns runtime validation, normalized traversal,
+aggregates, cache reconciliation, and presentation state.
+
+The mock server is implemented directly with Node's built-in `node:http` API,
+without a server-framework dependency. Vite's development proxy routes client
+API requests to the separately running server, so the standard development path
+does not require browser CORS handling. `node:http` also supports streaming if
+SSE is selected later, but this server choice does not select or design the
+realtime transport; a different approved transport may still require its own
+protocol support.
+
+This keeps the API contract observable, avoids embedding mock data in UI
+modules, and keeps the Foundation server dependency surface small. The trade-off
+is that request routing, response headers, error handling, and any later stream
+lifecycle must remain explicit rather than being supplied by a framework.
+
+### Validation precedes publication
+
+The HTTP payload is treated as `unknown`. Field/schema checks and required
+hierarchy invariants run before building an `OrgSnapshot`. Invalid input fails
+the query without replacing a previously valid cached snapshot.
+
+The normal server fixture contains at least 40 nodes and at least three levels,
+but an empty array remains schema-valid so the required empty state can be
+verified. Fixture-size compliance is a server acceptance check rather than a
+minimum-length rule for every client response.
+
+### TanStack Query owns the complete organization resource
+
+Per ADR 002, one query entry owns request/freshness/error state and the complete
+`OrgSnapshot`. Its query function consumes the supplied `AbortSignal`, validates
+the response, and publishes a snapshot only after the transformations required
+by the current stage succeed: topology normalization in Foundation and initial
+aggregation from Core onward.
+
+The query uses a five-second stale time. Concurrent consumers share one request;
+an unmount stops that observer, while the network request is aborted only when
+no remaining observer needs it. Stale data remains visible during background
+revalidation.
+
+Components do not mirror server-derived data into a second state store. Client
+interaction state such as selection, expansion, filter, sort, and keyboard
+focus remains separate from the query-owned snapshot.
+
+### Successful revalidation reconciles atomically
+
+A validated full response is compared semantically with the current raw node
+data. An unchanged response renews freshness while retaining the existing
+snapshot and materialized aggregates. A changed response is normalized and
+aggregated as a complete replacement before becoming observable.
+
+The mock server must not alter `updatedAt` merely because a GET occurred;
+timestamps change only with actual node data changes. This prevents no-op GETs
+from appearing semantically different.
+
+### Organization data uses the ADR 001 normalized snapshot
+
+`nodesById` is the only canonical copy of server-provided nodes.
+`rootIds`, `childrenByParentId`, and optionally `depthById` are materialized
+topology indexes. `aggregatesById` stores total headcount, total budget, and
+weighted performance sum and is introduced with Core rather than implemented
+prematurely in Foundation. Tree and table rows are projections rather than
+independent entity copies, and shared selection is represented by node id.
+
+The initial aggregate pass is post-order and `O(n)`. Average performance is
+derived from weighted performance sum and total headcount; a zero denominator
+has no numeric result.
+
+### Realtime updates modify the query-owned snapshot directly
+
+Polish accepts patches only for `headcount`, `budget`, and `performance` on an
+existing node. Applying a patch creates one logically consistent snapshot
+transition: update the target's raw metrics, recompute its aggregate from raw
+metrics and direct-child aggregates, and repeat bottom-up through its ancestors.
+Topology indexes and unrelated aggregate branches retain their values.
+
+A semantic no-op returns the current snapshot. A valid patch updates the query
+cache directly and does not invalidate the query or trigger a full GET solely
+because the patch arrived.
+
+### Table operations remain derived
+
+The table projects all node ids from the current snapshot, combines raw node and
+aggregate values, then filters and sorts a derived collection. Neither sorting
+nor filtering mutates canonical node order, hierarchy indexes, or aggregates.
+Selection is id-based so it survives row movement.
+
+### Verification follows the stage boundary
+
+Foundation verifies API shape, validation, hierarchy construction, caching,
+cancellation, request states, and tree behavior. Core adds aggregation and
+table behavior tests. Polish adds patch, incremental aggregate, connection,
+keyboard, and motion verification. Each mandatory stage is reviewed
+independently and has no known P0/P1 findings before its stage commit and tag.
+
+Documentation is updated where the corresponding contract first becomes
+concrete rather than duplicated speculatively in Foundation.
+
+### Bonus remains isolated
+
+Bonus work is not a prerequisite of any mandatory task. If undertaken, its
+transport, deployment, size measurement, and AI integration design is reviewed
+after Polish is complete.
+
+## Risks / Trade-offs
+
+- **[Query cache could become a second copy of domain data]** → Cache the full
+  normalized `OrgSnapshot`, not a raw DTO array mirrored elsewhere.
+- **[One consumer could cancel a request needed by another]** → Give request
+  ownership to the shared query and consume its `AbortSignal`; do not create a
+  controller per UI consumer.
+- **[A no-op response could rebuild aggregates]** → Compare validated raw data
+  semantically and retain the existing snapshot when unchanged.
+- **[Non-JSON structures could defeat default structural sharing]** → Resolve
+  the `Map` versus `Record` representation before implementing reconciliation
+  and cover no-op identity with tests.
+- **[A late GET could overwrite a newer realtime patch]** → Resolve ordering
+  and recovery semantics before Polish transport work; do not rely on arrival
+  order silently.
+- **[Weighted averages could drift after repeated patches]** → Recompute each
+  affected aggregate from current raw values and direct-child aggregates rather
+  than propagating arithmetic deltas.
+- **[Tree and table can diverge]** → Derive both from the same query-owned
+  snapshot and store shared selection only as an id.
+- **[Ambiguous keyboard, sorting, filtering, or tree reveal behavior could be
+  invented during implementation]** → Require human approval of the interaction
+  decisions listed below before their dependent tasks.
+- **[Stage history can become non-compliant]** → Verify and review each stage,
+  then create its final stage commit and `step/N` tag; keep Bonus optional.
+
+## Migration Plan
+
+There is no existing application or deployed data to migrate. Implementation
+proceeds Foundation → Core → Polish, with a verified commit and tag at each
+boundary. A stage can be rolled back to the previous stage tag without data
+migration. Bonus, if approved later, starts only from the completed Polish tag.
+
+## Unresolved Decisions / Human Review Gates
+
+The following decisions are intentionally not resolved by this proposal and
+must be reviewed before their dependent implementation begins:
+
+### Before Foundation implementation
+
+- Concrete runtime-validation library and the exact accepted DTO field types
+  and hierarchy validation policy.
+- `Map` versus JSON-compatible `Record` for normalized indexes, including the
+  semantic equality strategy used for no-op revalidation.
+- Styling approach: whether to use the optional styled-components preference or
+  another non-inline approach.
+- TanStack Query retry policy and stale revalidation triggers such as mount,
+  focus, and browser reconnect.
+- Exact interpretation of “second level open by default.”
+- Performance-indicator color mapping and how its meaning remains perceivable
+  without relying on color alone.
+
+### Before Core implementation
+
+- Toggle-only versus responsive split-view presentation.
+- Whether the Level column is numeric or uses hierarchy labels.
+- Sort activation states and how the assignment's double-click reversal
+  interacts with single clicks.
+- Name-filter matching rules and whether contextual ancestors are retained.
+- Whether selecting a hidden tree node expands ancestors and scrolls it into
+  view.
+
+### Before Polish implementation
+
+- WebSocket, SSE, or efficient polling transport.
+- Realtime patch envelope, ordering, recovery, and the race between an in-flight
+  GET and a newer patch.
+- `updatedAt` semantics for realtime changes, including whether a patch carries
+  a new timestamp as metadata and how it participates in reconciliation.
+- Whether applying a patch renews freshness for the entire GET resource.
+- Connection-state labels and retry cap/jitter policy beyond exponential
+  backoff.
+- Exact cell set highlighted by an update and behavior for repeated updates
+  within the 1.5-second fade period.
+- Table focus model and the exact Arrow/Home/End/Enter behavior.
+- How `docs/data-model.md` satisfies the literal WebSocket-patch wording if a
+  different transport is selected.
+
+### Before optional Bonus implementation
+
+- Whether Bonus will be undertaken at all.
+- Gzip size measurement scope, container/deployment topology, and AI provider or
+  local interpretation strategy.
