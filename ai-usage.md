@@ -247,6 +247,139 @@ $openspec-apply
 - **Human-modified:** No manual changes were observed during this task.
 - **Unknown provenance:** Existing repository changes outside this task remain unattributed.
 
+## Foundation task 1.24b provenance
+
+- **AI-generated:** The canvas viewport state, deterministic zoom controls, pointer pan handling, fit/reset actions, and this provenance entry were generated or modified by Codex in this task; no tests were added per the user's explicit instruction.
+- **Human decision:** Canvas navigation changes only the viewport while automatic node layout and organization data remain unchanged, following the approved Foundation design.
+- **Human-modified:** No manual changes were observed during this task.
+- **Unknown provenance:** Existing repository changes outside this task remain unattributed.
+
+## Canvas text-selection fix provenance
+
+- **AI-generated:** The canvas `user-select` rule and pointer default prevention were added by Codex in response to the user's selected interaction fix.
+- **Human decision:** The user explicitly approved preventing text selection during canvas pan.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
+## Canvas card selection provenance
+
+- **AI-generated:** The selected-card state, click and keyboard selection handlers, drag threshold, selected-card outline, and accessibility attributes were generated or modified by Codex in response to the user's request.
+- **Human decision:** The user explicitly requested selectable canvas cards while retaining pan behavior.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
+## Canvas card cursor fix provenance
+
+- **AI-generated:** The card-specific cursor styling was added by Codex to prevent the inherited pan cursor from appearing over selectable cards.
+- **Human decision:** The user reported the cursor issue and requested the interaction to work correctly.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
+## Canvas selection animation provenance
+
+- **AI-generated:** The selected-card halo, outline transition, reduced-motion fallback, and this provenance entry were generated or modified by Codex.
+- **Human decision:** The user selected the outline-plus-shadow indication with a small animation.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
+## Canvas card selection click fix provenance
+
+- **AI-generated:** The pointer default-prevention removal was generated or modified by Codex to preserve native click dispatch for card selection while retaining CSS-based text-selection prevention.
+- **Human decision:** The user reported that card selection did not work and requested the fix.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
+## Canvas card click and pan compatibility provenance
+
+- **AI-generated:** Deferred pointer capture until the pan threshold is crossed, preserving click dispatch for card selection while retaining drag navigation.
+- **Human decision:** The user reported that card selection still did not work and requested a working interaction.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
+## Tidy tree positioning provenance
+
+- **AI-generated:** The visible-subtree measurement, parent-centering layout, and animated card repositioning were generated or modified by Codex in response to the user's selected tidy-tree option.
+- **Human decision:** The user explicitly selected the tidy tree layout with animation.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
+## Synchronized canvas layout animation provenance
+
+- **AI-generated:** The shared requestAnimationFrame position interpolation for cards and SVG connections, including the reduced-motion fallback, was generated or modified by Codex to remove visual synchronization drift.
+- **Human decision:** The user reported that the connections appeared delayed relative to the cards and requested the layout animation to feel synchronized.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
+## Canvas arrowhead layering provenance
+
+- **AI-generated:** The separate arrowhead layer, z-index ordering, overlap offset, and centered SVG marker geometry were generated or modified by Codex in response to the user's visual feedback.
+- **Human decision:** The user requested arrowheads above cards with slight overlap and paths ending at the arrowhead's top center.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
+## Application loading optimization provenance
+
+- **AI-generated:** The lazy-loaded canvas chunk, Suspense loading fallback, and this provenance entry were generated or modified by Codex in response to the user's request to optimize application loading.
+- **Human decision:** The user approved proceeding with bundle analysis and code splitting.
+- **Human-modified:** No manual changes were observed during this optimization.
+- **Unknown provenance:** Existing repository changes outside this optimization remain unattributed.
+
+## Branch toggle alignment provenance
+
+- **AI-generated:** The flex centering and padding reset for the branch toggle glyph were generated or modified by Codex in response to the user's visual feedback.
+- **Human decision:** The user requested centered `+`/`−` glyphs inside card controls.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
+## Branch toggle SVG icon provenance
+
+- **AI-generated:** The compact inline SVG plus/minus branch-toggle icon and its styling were generated or modified by Codex in response to the user's request.
+- **Human decision:** The user requested SVG icons instead of text glyphs in the card controls.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
+## Environment-driven mock states provenance
+
+- **AI-generated:** The mock-server modes, delay handling, invalid-response fixture, environment example, and this provenance entry were generated or modified by Codex in response to the user's request.
+- **Human decision:** The user approved an env-driven approach for reproducible loading, error, and empty-state checks in the take-home assignment.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
+## Canvas controls and loading alignment provenance
+
+- **AI-generated:** The centered loading-state layout, reused SVG zoom icons, Russian reset label, removed Fit view handler, and this provenance entry were generated or modified by Codex in response to the user's requested UI adjustments.
+- **Human decision:** The user explicitly requested all four presentation and control changes.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
+## Empty and loading message typography provenance
+
+- **AI-generated:** The centered empty-state content and shared enlarged state-message typography were generated or modified by Codex in response to the user's visual feedback.
+- **Human decision:** The user explicitly requested a centered empty state and larger loading/empty-state text.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
+## Fixed dashboard state height provenance
+
+- **AI-generated:** The shared fixed-height dashboard panel, fixed canvas viewport height, and centered empty-state content were generated or modified by Codex in response to the user's request.
+- **Human decision:** The user explicitly requested a constant container height for canvas and loading/error states.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
+## Viewport-bounded dashboard height provenance
+
+- **AI-generated:** The viewport-bounded panel height and flex-based canvas sizing were generated or modified by Codex in response to the user's correction that the fixed container must not exceed the window height.
+- **Human decision:** The user explicitly requested a shared state height bounded by the browser viewport.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
+## Mobile canvas sizing provenance
+
+- **AI-generated:** The responsive app/panel padding and viewport-bounded mobile panel height were generated or modified by Codex in response to the user's request for a wider and taller mobile canvas area.
+- **Human decision:** The user explicitly requested more mobile space for the canvas while keeping it within the screen height.
+- **Human-modified:** No manual changes were observed during this fix.
+- **Unknown provenance:** Existing repository changes outside this fix remain unattributed.
+
 ## Foundation task 1.22 provenance
 
 - **AI-generated:** The normalized hierarchy tree projection and its dashboard integration were generated or modified by Codex in this task; no tests were added per the user's explicit instruction.
@@ -265,6 +398,20 @@ $openspec-apply
 
 - **AI-generated:** The node metric presentation, performance-band mapping, accessible text label, and provenance entry were generated or modified by Codex in this task; no tests were added per the user's explicit instruction.
 - **Human decision:** The performance thresholds and requirement for text label plus numeric value were explicitly approved by the user and recorded in design.md.
+- **Human-modified:** No manual changes were observed during this task.
+- **Unknown provenance:** Existing repository changes outside this task remain unattributed.
+
+## Foundation task 1.24a provenance
+
+- **AI-generated:** The deterministic top-down canvas layout, metric cards, directed SVG connections, and migration from nested-list rendering were generated or modified by Codex in this task; no tests were added per the user's explicit instruction.
+- **Human decision:** Canvas-first presentation, automatic top-down layout, metric card contents, and initial two-level visibility follow the updated approved design and requirements.
+- **Human-modified:** No manual changes were observed during this task.
+- **Unknown provenance:** Existing repository changes outside this task remain unattributed.
+
+## Foundation task 1.21a provenance
+
+- **AI-generated:** The spinner, initial retry action, non-blocking revalidation status, and background failure notice were generated or modified by Codex in this task; no tests were added per the user's explicit instruction.
+- **Human decision:** Request-state behavior follows the approved Foundation design: initial failures block with retry, while stale snapshots remain usable during revalidation.
 - **Human-modified:** No manual changes were observed during this task.
 - **Unknown provenance:** Existing repository changes outside this task remain unattributed.
 

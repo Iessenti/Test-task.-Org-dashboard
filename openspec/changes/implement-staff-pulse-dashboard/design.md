@@ -124,6 +124,74 @@ aggregate values, then filters and sorts a derived collection. Neither sorting
 nor filtering mutates canonical node order, hierarchy indexes, or aggregates.
 Selection is id-based so it survives row movement.
 
+### Presentation and visual hierarchy
+
+The canvas is the primary desktop presentation and the table is available as a
+separate mode through a compact `Карта / Таблица` segmented control in the
+header. The canvas renders the organization top-down: divisions, departments,
+and teams are automatically positioned in hierarchy order and connected by
+subtle curved directed edges. It uses a light background with a restrained dot
+grid; there is one light theme only.
+
+Each canvas card shows the node name, raw headcount, raw budget, and
+performance as a numeric value, text band, and short colored scale. Cards stay
+neutral; `#73ABF5` is reserved for selection, active edges, controls, and focus
+states, while performance colors retain their independent low/medium/high
+meaning. The selected card receives an accent outline and its ancestor path may
+use the active edge treatment.
+
+The initial canvas view shows the first two hierarchy levels. Branches expand
+independently, with deeper teams hidden until their parent branch is expanded.
+The canvas supports zoom around the pointer, pan, `+`, `-`, `Fit view`, and
+`Reset` controls. Its initial framing prioritizes readable top-level and
+second-level cards; `Fit view` provides a deliberate whole-organization view.
+Nodes are not user-dragged, so the automatic layout remains deterministic.
+
+### Shared selection and detail presentation
+
+Selection is represented by `selectedNodeId` and survives switching between
+canvas and table, sorting, and filtering. A table row selects the corresponding
+canvas node. If the selected node is hidden by collapsed ancestors, the canvas
+expands those ancestors and scrolls or centers the node into view.
+
+On the canvas, selecting a card opens a right-side detail panel. The panel
+separates raw metrics from aggregate subtree metrics, includes the selected
+node's children, and shows its last update time. The panel is hidden in table
+mode, while the selected id and row highlight remain intact.
+
+### Table interaction model
+
+The table uses compact analytical rows with a sticky header. The Level column
+uses hierarchy labels (`Дивизион`, `Отдел`, `Команда`). Sorting has three states:
+ascending, descending, and cleared/default order. A double-click on the active
+sort control reverses the active direction as required by the assignment.
+
+Name filtering is case-insensitive substring matching. Matching rows retain
+their ancestor rows as context; source organization data and canonical order
+remain unchanged. Table keyboard focus moves between rows with Arrow keys,
+`Home`, and `End`; `Enter` activates the focused row and selects its node.
+
+### Request, connection, and update states
+
+Before the first successful snapshot, loading and error are full dashboard
+states: loading uses a general spinner and message, while an initial error
+offers a retry action. A valid empty response remains a distinct empty state.
+
+Once data is visible, background GET revalidation keeps the canvas/table usable
+and exposes a small `Обновляем…` status rather than a blocking overlay. A
+background revalidation error preserves the last valid snapshot and exposes a
+non-blocking failure notice.
+
+The header uses a compact realtime badge with `Live`, `Reconnecting…`, and
+`Offline` states. Connection loss does not disable the dashboard. The exact
+transport, patch protocol, ordering/recovery policy, and backoff cap/jitter
+remain open until the Polish transport gate is resolved.
+
+An accepted metric patch locally fades only the changed raw metric and the
+affected aggregate values on the target and ancestor rows/cards. A repeated
+update extends the active fade window from the latest update. Unrelated
+branches and unchanged values receive no feedback.
+
 ### Verification follows the stage boundary
 
 Foundation verifies API shape, validation, hierarchy construction, caching,
@@ -161,9 +229,12 @@ after Polish is complete.
   than propagating arithmetic deltas.
 - **[Tree and table can diverge]** → Derive both from the same query-owned
   snapshot and store shared selection only as an id.
-- **[Ambiguous keyboard, sorting, filtering, or tree reveal behavior could be
-  invented during implementation]** → Require human approval of the interaction
-  decisions listed below before their dependent tasks.
+- **[Canvas cards, table rows, and detail state could diverge]** → Keep
+  `selectedNodeId` as the only shared selection state and derive all projections
+  from the query-owned snapshot.
+- **[Non-blocking status feedback could be missed or could obstruct work]** →
+  Reserve blocking states for the initial request and use compact status/badge
+  feedback after a valid snapshot exists.
 - **[Stage history can become non-compliant]** → Verify and review each stage,
   then create its final stage commit and `step/N` tag; keep Bonus optional.
 
@@ -214,16 +285,6 @@ must be reviewed before their dependent implementation begins:
   ownership, SWR behavior, and the five-second freshness requirement from
   ADR 002.
 
-### Before Core implementation
-
-- Toggle-only versus responsive split-view presentation.
-- Whether the Level column is numeric or uses hierarchy labels.
-- Sort activation states and how the assignment's double-click reversal
-  interacts with single clicks.
-- Name-filter matching rules and whether contextual ancestors are retained.
-- Whether selecting a hidden tree node expands ancestors and scrolls it into
-  view.
-
 ### Before Polish implementation
 
 - WebSocket, SSE, or efficient polling transport.
@@ -232,16 +293,13 @@ must be reviewed before their dependent implementation begins:
 - `updatedAt` semantics for realtime changes, including whether a patch carries
   a new timestamp as metadata and how it participates in reconciliation.
 - Whether applying a patch renews freshness for the entire GET resource.
-- Connection-state labels and retry cap/jitter policy beyond exponential
-  backoff.
-- Exact cell set highlighted by an update and behavior for repeated updates
-  within the 1.5-second fade period.
-- Table focus model and the exact Arrow/Home/End/Enter behavior.
+- Retry cap/jitter policy beyond exponential backoff.
 - How `docs/data-model.md` satisfies the literal WebSocket-patch wording if a
   different transport is selected.
 
 ### Before optional Bonus implementation
 
 - Whether Bonus will be undertaken at all.
+- Mobile-specific map/table presentation and responsive card/table behavior.
 - Gzip size measurement scope, container/deployment topology, and AI provider or
   local interpretation strategy.

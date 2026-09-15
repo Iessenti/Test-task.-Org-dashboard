@@ -1,35 +1,5 @@
-import { createGlobalStyle, styled } from 'styled-components';
-import { OrganizationDashboard } from '@/features/organization/OrganizationDashboard';
-
-const GlobalStyle = createGlobalStyle`
-  :root {
-    color: #18212f;
-    background: #f4f7fb;
-    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  }
-
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-  }
-
-  body {
-    margin: 0;
-    min-width: 320px;
-  }
-`;
-
-const AppShell = styled.main`
-  min-height: 100vh;
-  padding: 32px;
-`;
-
-const Title = styled.h1`
-  margin: 0;
-  font-size: 2rem;
-  line-height: 1.2;
-`;
+import { OrganizationDashboard } from '@/containers/OrganizationDashboard/OrganizationDashboard';
+import { AppShell, GlobalStyle, Title } from './App.style';
 
 export function App() {
   return (
