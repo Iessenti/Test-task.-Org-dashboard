@@ -1,11 +1,15 @@
 import type { KeyboardEvent } from "react";
 import type { OrgNodeDto } from "@/data/org-tree/org-tree-validation";
 import type { LayoutNode } from "@/features/organization-tree/model/canvas-layout";
+import type { RealtimeFeedbackController } from "@/data/org-tree/use-realtime-feedback";
+import type { OrgAggregate } from "@/data/org-tree/org-tree-validation";
+import { getAveragePerformance } from "@/data/org-tree/org-tree-aggregation";
 import { formatMetricNumber } from "@/data/org-tree/number-formatters";
 import { BranchToggleIcon } from "./BranchToggleIcon";
 import {
     Metric,
     MetricValue,
+    MetricVisual,
     Metrics,
     NodeCard,
     NodeHeader,
@@ -13,12 +17,14 @@ import {
     NodeToggle,
     PerformanceScale,
     PerformanceValue,
+    FeedbackValue,
+    BranchReveal,
 } from "@/features/organization-tree/containers/OrganizationTree.style";
 
-function getPerformanceBand(performance: number) {
-    if (performance < 50) return { label: "Низкая", color: "#b42318" };
-    if (performance < 80) return { label: "Средняя", color: "#9a6700" };
-    return { label: "Высокая", color: "#067647" };
+function getPerformanceColor(performance: number) {
+    if (performance < 50) return "#b42318";
+    if (performance < 80) return "#9a6700";
+    return "#067647";
 }
 function formatBudget(budget: number) {
     return new Intl.NumberFormat("ru-RU").format(budget);
@@ -35,8 +41,12 @@ export function OrganizationTreeNode({
     onToggle,
     onSelect,
     onClick,
+    feedback,
+    aggregate,
+    isVisible,
 }: {
     node: OrgNodeDto;
+    aggregate: OrgAggregate;
     layout: LayoutNode;
     renderedPosition: LayoutNode;
     isExpanded: boolean;
@@ -46,27 +56,30 @@ export function OrganizationTreeNode({
     onToggle: () => void;
     onSelect: (_nodeId: string) => void;
     onClick: () => void;
+    feedback: RealtimeFeedbackController;
+    isVisible: boolean;
 }) {
-    const performanceBand = getPerformanceBand(node.performance);
+    const performanceColor = getPerformanceColor(node.performance);
+    const averagePerformance = getAveragePerformance(aggregate);
     const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
         if (event.key !== "Enter" && event.key !== " ") return;
         event.preventDefault();
         onSelect(node.id);
     };
     return (
+        <BranchReveal $isSelected={isSelected} $isVisible={isVisible} $x={renderedPosition.x} $y={renderedPosition.y}>
         <NodeCard
             key={node.id}
             data-node-id={node.id}
             $isPanning={isPanning}
             $isSelected={isSelected}
-            $x={renderedPosition.x}
-            $y={renderedPosition.y}
             aria-level={layout.depth + 1}
+            aria-hidden={!isVisible}
             aria-selected={isSelected}
             onClick={onClick}
             onKeyDown={handleKeyDown}
             role="treeitem"
-            tabIndex={0}
+            tabIndex={isVisible ? 0 : -1}
         >
             <NodeHeader>
                 <NodeName>{node.name}</NodeName>
@@ -88,27 +101,42 @@ export function OrganizationTreeNode({
             <Metrics>
                 <Metric>
                     <dt>Сотрудники</dt>
-                    <MetricValue>{node.headcount}</MetricValue>
+                    <MetricValue><FeedbackValue key={feedback.getToken(node.id, 'headcount')} $active={feedback.isActive(node.id, 'headcount')} $color="#18212f">{node.headcount}</FeedbackValue></MetricValue>
                 </Metric>
                 <Metric>
                     <dt>Бюджет</dt>
-                    <MetricValue>{formatBudget(node.budget)} ₽</MetricValue>
+                    <MetricValue><FeedbackValue key={feedback.getToken(node.id, 'budget')} $active={feedback.isActive(node.id, 'budget')} $color="#18212f">{formatBudget(node.budget)} ₽</FeedbackValue></MetricValue>
                 </Metric>
                 <Metric>
                     <dt>Эффективность</dt>
-                    <PerformanceValue
-                        $color={performanceBand.color}
-                        aria-label={`Эффективность: ${performanceBand.label}, ${node.performance}`}
-                    >
-                        {performanceBand.label}: {formatMetricNumber(node.performance)}
-                    </PerformanceValue>
+                    <MetricVisual>
+                        <PerformanceValue
+                            $color={performanceColor}
+                            aria-label={`Эффективность: ${node.performance}`}
+                        >
+                            <FeedbackValue key={feedback.getToken(node.id, 'performance')} $active={feedback.isActive(node.id, 'performance')} $color={performanceColor}>{formatMetricNumber(node.performance)}</FeedbackValue>
+                        </PerformanceValue>
+                        <PerformanceScale $color={performanceColor} $value={node.performance} aria-hidden="true" />
+                    </MetricVisual>
                 </Metric>
+                {hasChildren && (
+                    <Metric>
+                        <dt>Средняя эффективность</dt>
+                        <MetricVisual>
+                            <PerformanceValue
+                                $color={averagePerformance === null ? '#526176' : getPerformanceColor(averagePerformance)}
+                                aria-label={`Средняя эффективность: ${averagePerformance ?? 'нет данных'}`}
+                            >
+                                <FeedbackValue key={feedback.getToken(node.id, 'averagePerformance')} $active={feedback.isActive(node.id, 'averagePerformance')} $color={averagePerformance === null ? '#526176' : getPerformanceColor(averagePerformance)}>
+                                    {averagePerformance === null ? '—' : formatMetricNumber(averagePerformance)}
+                                </FeedbackValue>
+                            </PerformanceValue>
+                            {averagePerformance !== null && <PerformanceScale $color={getPerformanceColor(averagePerformance)} $value={averagePerformance} aria-hidden="true" />}
+                        </MetricVisual>
+                    </Metric>
+                )}
             </Metrics>
-            <PerformanceScale
-                $color={performanceBand.color}
-                $value={node.performance}
-                aria-hidden="true"
-            />
         </NodeCard>
+        </BranchReveal>
     );
 }

@@ -1,7 +1,7 @@
 import type { OrgSnapshot } from '@/data/org-tree/org-tree-validation';
 
 export const CARD_WIDTH = 232;
-export const CARD_HEIGHT = 168;
+export const CARD_HEIGHT = 216;
 export const HORIZONTAL_GAP = 40;
 export const VERTICAL_GAP = 88;
 export const CANVAS_PADDING = 40;
@@ -13,6 +13,7 @@ export const ARROW_OVERLAP = 6;
 
 export type LayoutNode = {
   id: string;
+  parentId: string | null;
   depth: number;
   x: number;
   y: number;
@@ -22,6 +23,7 @@ type VisibleTreeNode = {
   children: VisibleTreeNode[];
   depth: number;
   id: string;
+  parentId: string | null;
   subtreeWidth: number;
 };
 
@@ -43,7 +45,8 @@ export function interpolatePositions(
 ) {
   const positions: Record<string, LayoutNode> = {};
   for (const target of Object.values(to)) {
-    const previous = from[target.id];
+    const previous = from[target.id]
+      ?? (target.parentId === null ? undefined : from[target.parentId]);
     if (previous === undefined) {
       positions[target.id] = target;
       continue;
@@ -60,22 +63,22 @@ export function interpolatePositions(
 }
 
 export function buildLayout(snapshot: OrgSnapshot, expandedIds: ReadonlySet<string>): CanvasLayout {
-  const createVisibleNode = (id: string, depth: number): VisibleTreeNode | null => {
+  const createVisibleNode = (id: string, depth: number, parentId: string | null): VisibleTreeNode | null => {
     if (snapshot.nodesById[id] === undefined) {
       return null;
     }
 
     const children = expandedIds.has(id)
       ? (snapshot.childrenByParentId[id] ?? [])
-          .map((childId) => createVisibleNode(childId, depth + 1))
+          .map((childId) => createVisibleNode(childId, depth + 1, id))
           .filter((child): child is VisibleTreeNode => child !== null)
       : [];
 
-    return { children, depth, id, subtreeWidth: CARD_WIDTH };
+    return { children, depth, id, parentId, subtreeWidth: CARD_WIDTH };
   };
 
   const roots = snapshot.rootIds
-    .map((rootId) => createVisibleNode(rootId, 0))
+    .map((rootId) => createVisibleNode(rootId, 0, null))
     .filter((root): root is VisibleTreeNode => root !== null);
 
   const measureSubtree = (node: VisibleTreeNode): number => {
@@ -97,6 +100,7 @@ export function buildLayout(snapshot: OrgSnapshot, expandedIds: ReadonlySet<stri
   const positionSubtree = (node: VisibleTreeNode, left: number) => {
     positions[node.id] = {
       id: node.id,
+      parentId: node.parentId,
       depth: node.depth,
       x: left + (node.subtreeWidth - CARD_WIDTH) / 2,
       y: CANVAS_PADDING + node.depth * (CARD_HEIGHT + VERTICAL_GAP),

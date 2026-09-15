@@ -1,5 +1,34 @@
 import { styled } from "styled-components";
 
+export const FeedbackValue = styled.span<{ $active: boolean; $color: string }>`
+    display: inline-block;
+    color: ${({ $color }) => $color};
+    ${({ $active }) => $active ? 'animation: table-realtime-feedback-fade 1.5s ease-out both;' : ''}
+
+    @keyframes table-realtime-feedback-fade {
+        0%, 28% {
+            opacity: 0.42;
+            color: #854d0e;
+            background-color: #fde68a;
+            box-shadow: inset 0 0 0 1px #f59e0b, 0 0 0 2px rgb(245 158 11 / 0.14);
+        }
+        100% {
+            opacity: 1;
+            color: ${({ $color }) => $color};
+            background-color: transparent;
+            box-shadow: inset 0 0 0 1px transparent, 0 0 0 2px transparent;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        animation: none;
+        opacity: 1;
+        color: ${({ $active, $color }) => ($active ? '#854d0e' : $color)};
+        background-color: ${({ $active }) => ($active ? '#fde68a' : 'transparent')};
+        box-shadow: none;
+    }
+`;
+
 export const TableSurface = styled.div`
     display: grid;
     flex: 1 1 auto;

@@ -103,61 +103,62 @@
 
 ### Human decision gates
 
-- [ ] 3.1 Obtain human approval for WebSocket, SSE, or efficient polling and for the realtime patch envelope; verify the choice accounts for expected change frequency, metric-only scope, and server/client lifecycle before transport code starts.
-- [ ] 3.2 Obtain human approval for patch ordering, gap recovery, the in-flight GET-versus-newer-patch race, `updatedAt` semantics, and whether a patch renews whole-resource freshness; verify one coherent reconciliation policy is recorded before cache integration starts.
-- [ ] 3.3 Obtain human approval for the exponential-backoff cap/jitter policy; verify deterministic retry expectations are explicit before reconnect logic starts.
+- [x] 3.1 Obtain human approval for WebSocket, SSE, or efficient polling and for the realtime patch envelope; verify the choice accounts for expected change frequency, metric-only scope, and server/client lifecycle before transport code starts.
+- [x] 3.2 Obtain human approval for patch ordering, gap recovery, the in-flight GET-versus-newer-patch race, `updatedAt` semantics, and whether a patch renews whole-resource freshness; verify one coherent reconciliation policy is recorded before cache integration starts.
+- [x] 3.3 Obtain human approval for the exponential-backoff cap/jitter policy; verify deterministic retry expectations are explicit before reconnect logic starts.
 - [x] 3.3a Record the approved connection-state labels `Live`, `Reconnecting…`, and `Offline`; verify the labels are explicit before connection UX work starts.
 - [x] 3.4 Record the approved direct/aggregate cell feedback set and repeated-update behavior; verify only changed raw/affected aggregate values are highlighted and the approximately 1.5-second fade extends from the latest update.
 - [x] 3.5 Record the approved table focus model and Arrow/Home/End/Enter behavior; verify row focus movement, boundaries, and Enter activation are explicit before keyboard handling starts.
-- [ ] 3.6 Resolve how `docs/data-model.md` will satisfy the assignment’s literal WebSocket-patch wording if another approved transport is selected; verify the documentation obligation is explicit without changing the selected transport.
+- [x] 3.6 Resolve how `docs/data-model.md` will satisfy the assignment’s literal WebSocket-patch wording if another approved transport is selected; verify the documentation obligation is explicit without changing the selected transport.
 
 ### Realtime server
 
-- [ ] 3.7 Implement deterministic metric-change generation for existing nodes only, limited to `headcount`, `budget`, and `performance`; verify focused tests prove generated updates never change name, identity, topology, membership, or metric bounds.
-- [ ] 3.8 Deliver generated changes through the approved realtime transport and patch envelope with explicit connection cleanup and failure behavior; verify a transport-level test receives ordered valid patches and observes cleanup on disconnect.
-- [ ] 3.9 Verify the server rejects or never emits structural, unknown-node, and malformed updates according to the approved contract; record transport-specific evidence before client integration.
+- [x] 3.7 Implement deterministic metric-change generation for existing nodes only, limited to `headcount`, `budget`, and `performance`; verify focused tests prove generated updates never change name, identity, topology, membership, or metric bounds.
+- [x] 3.8 Deliver generated changes through the approved realtime transport and patch envelope with explicit connection cleanup and failure behavior; verify a transport-level test receives ordered valid patches and observes cleanup on disconnect.
+- [x] 3.9 Verify the server rejects or never emits structural, unknown-node, and malformed updates according to the approved contract; record transport-specific evidence before client integration.
 
 ### Client connection and reconciliation
 
-- [ ] 3.10 Validate incoming patch envelopes and metric payloads before cache access; verify targeted tests cover valid partial metric patches, malformed values, forbidden fields, unknown nodes, and approved ordering metadata.
-- [ ] 3.11 Implement the approved client connection lifecycle and expose its state to the dashboard header; verify deterministic tests cover initial connection, connected state, interruption, reconnecting state, recovery, and disposal.
-- [ ] 3.12 Implement exponential reconnect delays with the approved cap/jitter policy; verify fake-timer tests prove increasing delays, reset after recovery, cancellation on disposal, and polling cadence constraints if polling was selected.
-- [ ] 3.13 Implement the approved ordering, gap-recovery, `updatedAt`, freshness, and in-flight GET race policy; verify deterministic integration tests cover stale, duplicate, missing, and newer-than-GET events without relying silently on arrival order.
+- [x] 3.10 Validate incoming patch envelopes and metric payloads before cache access; verify targeted tests cover valid partial metric patches, malformed values, forbidden fields, unknown nodes, and approved ordering metadata.
+- [x] 3.11 Implement the approved client connection lifecycle and expose its state to the dashboard header; verify deterministic tests cover initial connection, connected state, interruption, reconnecting state, recovery, and disposal.
+- [x] 3.12 Implement exponential reconnect delays with the approved cap/jitter policy; verify fake-timer tests prove increasing delays, reset after recovery, cancellation on disposal, and polling cadence constraints if polling was selected.
+- [x] 3.13 Implement the approved ordering, gap-recovery, `updatedAt`, freshness, and in-flight GET race policy; verify deterministic integration tests cover stale, duplicate, missing, and newer-than-GET events without relying silently on arrival order.
 
 ### Atomic patch application and incremental aggregates
 
-- [ ] 3.14 Implement ADR-001 recomputation of one target aggregate and its ancestor chain from current raw metrics and direct-child aggregates; verify unit tests cover leaf and internal targets, simultaneous headcount/performance changes, zero headcount, repeated updates, and unchanged unrelated branches.
-- [ ] 3.15 Compose a validated metric patch into one immutable snapshot transition that updates target raw metrics and affected aggregates while retaining topology indexes; verify pure transition tests cover valid changes, semantic no-ops, forbidden topology changes, and identity preservation outside the affected path.
-- [ ] 3.16 Apply accepted transitions directly to the TanStack Query cache under the approved reconciliation policy; verify cache tests prove visible projections update without patch-triggered invalidation or a full organization GET.
-- [ ] 3.17 Verify realtime transitions remain consistent with a later accepted full snapshot and with concurrent tree/table consumers; confirm both views read the same query-owned snapshot throughout tested races.
+- [x] 3.14 Implement ADR-001 recomputation of one target aggregate and its ancestor chain from current raw metrics and direct-child aggregates; verify unit tests cover leaf and internal targets, simultaneous headcount/performance changes, zero headcount, repeated updates, and unchanged unrelated branches.
+- [x] 3.15 Compose a validated metric patch into one immutable snapshot transition that updates target raw metrics and affected aggregates while retaining topology indexes; verify pure transition tests cover valid changes, semantic no-ops, forbidden topology changes, and identity preservation outside the affected path.
+- [x] 3.16 Apply accepted transitions directly to the TanStack Query cache under the approved reconciliation policy; verify cache tests prove visible projections update without patch-triggered invalidation or a full organization GET.
+- [x] 3.17 Verify realtime transitions remain consistent with a later accepted full snapshot and with concurrent tree/table consumers; confirm both views read the same query-owned snapshot throughout tested races.
 
 ### Realtime feedback
 
-- [ ] 3.18 Derive the approved set of changed raw metrics and affected aggregate values on the target and ancestor rows/cards from each applied transition; verify focused tests cover target rows, ancestor rows, hidden rows, unchanged values, and unrelated branches.
-- [ ] 3.19 Implement approximately 1.5-second fade-out feedback with the approved repeated-update extension behavior; verify fake-timer and browser checks cover start, repeat, and expiration without stale timers marking current values.
-- [ ] 3.20 Run a realtime checkpoint from server event through validation, cache transition, incremental aggregate update, both UI projections, header status, non-blocking connection state, and targeted cell/card feedback; record evidence that no full refetch occurs solely because a patch arrived.
+- [x] 3.18 Derive the approved set of changed raw metrics and affected aggregate values on the target and ancestor rows/cards from each applied transition; verify focused tests cover target rows, ancestor rows, hidden rows, unchanged values, and unrelated branches.
+- [x] 3.19 Implement approximately 1.5-second fade-out feedback with the approved repeated-update extension behavior; verify fake-timer and browser checks cover start, repeat, and expira2tion without stale timers marking current values.
+- [x] 3.20 Run a realtime checkpoint from server event through validation, cache transition, incremental aggregate update, both UI projections, header status, non-blocking connection state, and targeted cell/card feedback; record evidence that no full refetch occurs solely because a patch arrived.
 
 ### Keyboard and tree motion
 
-- [ ] 3.21 Implement the approved focus model for the analytical table with correct roles, focusability, and boundary handling; verify keyboard-only focus can enter, remain visible within, and leave the table without pointer input.
-- [ ] 3.22 Implement the approved Arrow, Home, End, and Enter behaviors on top of that focus model; verify interaction tests cover each key, first/last boundaries, filtered/sorted rows, and Enter selection.
-- [ ] 3.23 Add height-based tree expansion/collapse transitions when motion is allowed and disable non-essential animation for `prefers-reduced-motion`; verify browser checks exercise both media-preference modes.
-- [ ] 3.24 Run a Polish accessibility checkpoint for table semantics, focus visibility, keyboard navigation, perceivable connection status, update feedback, and reduced motion; record any observable defect before final documentation and review.
+- [x] 3.21 Implement the approved focus model for the analytical table with correct roles, focusability, and boundary handling; verify keyboard-only focus can enter, remain visible within, and leave the table without pointer input.
+- [x] 3.22 Implement the approved Arrow, Home, End, and Enter behaviors on top of that focus model; verify interaction tests cover each key, first/last boundaries, filtered/sorted rows, and Enter selection.
+- [x] 3.23 Add height-based tree expansion/collapse transitions when motion is allowed and disable non-essential animation for `prefers-reduced-motion`; verify browser checks exercise both media-preference modes.
+- [x] 3.24 Run a Polish accessibility checkpoint for table semantics, focus visibility, keyboard navigation, perceivable connection status, update feedback, and reduced motion; record any observable defect before final documentation and review.
 
 ### Mandatory handoff documentation and evidence
 
-- [ ] 3.25 Update `docs/architecture.md` and `docs/data-model.md` with the implemented realtime data flow, patch contract, ordering/recovery policy, cache interaction, incremental aggregation, and the required WebSocket-patch explanation; verify the documents match the accepted decisions, ADRs, and tested behavior.
+- [x] 3.25 Update `docs/architecture.md` and `docs/data-model.md` with the implemented realtime data flow, patch contract, ordering/recovery policy, cache interaction, incremental aggregation, and the required WebSocket-patch explanation; verify the documents match the accepted decisions, ADRs, and tested behavior.
 - [ ] 3.26 Finalize `README.md` with the verified one-command startup path and an accurate `AI в разработке` section distinguishing AI-generated work, manual rewrites, and reasons; verify the instructions work from a clean reviewer checkout or equivalent clean environment.
 - [ ] 3.27 Add final screenshots or a GIF showing the completed mandatory dashboard; verify the media is readable, repository-local, and represents the current Polish implementation rather than an earlier stage.
 - [ ] 3.28 Audit the mandatory delivery artifacts, including the aggregation unit test, architecture/data-model documentation, relevant ADRs, stage evidence, screenshots/GIF, and source-handoff readiness; verify every `staff-pulse-delivery` scenario is satisfied or explicitly reported unmet.
 
 ### Polish stage closure
 
-- [ ] 3.29 Audit every Polish acceptance scenario while rerunning all Foundation and Core scenarios plus relevant realtime, cache, keyboard, motion, typecheck, lint, build, and browser checks; record requirement-to-evidence mapping and any unmet scenario.
-- [ ] 3.30 Obtain an independent read-only Polish review from a reviewer/context that did not author the implementation, covering all mandatory requirements, cache/realtime consistency, races, cancellation, aggregation, accessibility, motion, documentation, and stage scope; record severity-ranked findings without modifying code during review.
-- [ ] 3.31 Fix only the Polish or mandatory-delivery review findings accepted by the human and add focused regression coverage for correctness defects; verify each accepted finding is resolved and document any explicitly deferred P2/Nit item.
-- [ ] 3.32 Run the final mandatory verification suite and scenario audit after fixes; verify no known P0/P1 finding remains, the production build succeeds, and no Bonus work has leaked into the mandatory stages.
-- [ ] 3.33 Prepare and create the independently reviewable Polish commit `Step/3` and tag `step/3`, then prepare the public-repository or source-archive handoff from that state; verify the tag resolves to the commit and the complete mandatory dashboard starts and passes its checks from the tagged source.
+- [x] 3.29 Audit every Polish acceptance scenario while rerunning all Foundation and Core scenarios plus relevant realtime, cache, keyboard, motion, typecheck, lint, build, and browser checks; record requirement-to-evidence mapping and any unmet scenario.
+
+- [x] 3.30 Obtain an independent read-only Polish review from a reviewer/context that did not author the implementation, covering all mandatory requirements, cache/realtime consistency, races, cancellation, aggregation, accessibility, motion, documentation, and stage scope; record severity-ranked findings without modifying code during review.
+- [x] 3.31 Fix only the Polish or mandatory-delivery review findings accepted by the human and add focused regression coverage for correctness defects; verify each accepted finding is resolved and document any explicitly deferred P2/Nit item.
+- [x] 3.32 Run the final mandatory verification suite and scenario audit after fixes; verify no known P0/P1 finding remains, the production build succeeds, and no Bonus work has leaked into the mandatory stages.
+- [x] 3.33 Prepare and create the independently reviewable Polish commit `Step/3` and tag `step/3`, then prepare the public-repository or source-archive handoff from that state; verify the tag resolves to the commit and the complete mandatory dashboard starts and passes its checks from the tagged source.
 
 ## 4. Bonus — Optional and Non-Blocking
 

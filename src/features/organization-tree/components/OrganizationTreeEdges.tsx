@@ -9,6 +9,7 @@ import {
 import {
     ArrowLayer,
     EdgeLayer,
+    EdgePath,
 } from "@/features/organization-tree/containers/OrganizationTree.style";
 
 function edgePath(parent: LayoutNode, child: LayoutNode) {
@@ -25,17 +26,18 @@ export function OrganizationTreeEdges({
     width,
     height,
 }: {
-    edges: Array<{ parent: LayoutNode; child: LayoutNode }>;
+    edges: Array<{ parent: LayoutNode; child: LayoutNode; isVisible: boolean }>;
     width: number;
     height: number;
 }) {
     return (
         <>
             <EdgeLayer aria-hidden="true" height={height} width={width}>
-                {edges.map(({ parent, child }) => (
-                    <path
+                {edges.map(({ parent, child, isVisible }) => (
+                    <EdgePath
                         key={`${parent.id}-${child.id}`}
                         d={edgePath(parent, child)}
+                        $isVisible={isVisible}
                         fill="none"
                         stroke="#b8c7da"
                         strokeWidth="2"
@@ -60,10 +62,11 @@ export function OrganizationTreeEdges({
                         />
                     </marker>
                 </defs>
-                {edges.map(({ parent, child }): ReactElement => (
-                    <path
+                {edges.map(({ parent, child, isVisible }): ReactElement => (
+                    <EdgePath
                         key={`${parent.id}-${child.id}`}
                         d={edgePath(parent, child)}
+                        $isVisible={isVisible}
                         fill="none"
                         markerEnd="url(#organization-arrow)"
                         stroke="transparent"

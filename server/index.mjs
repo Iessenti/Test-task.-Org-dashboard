@@ -18,6 +18,7 @@ server.on('error', (error) => {
 });
 
 const shutdown = () => {
+  server.closeRealtimeClients();
   server.close(() => process.exit(0));
 };
 
