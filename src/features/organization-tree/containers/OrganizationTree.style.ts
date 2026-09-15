@@ -23,6 +23,18 @@ export const CanvasFrame = styled.div`
   position: relative; display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0;
 `;
 
+export const CanvasContent = styled.div`
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  gap: 16px;
+  min-height: 0;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
+`;
+
 export const CanvasControls = styled.div`
   display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;
 `;
@@ -68,7 +80,7 @@ export const NodeName = styled.span`
 export const NodeToggle = styled.button`
   display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
   width: 28px; height: 28px; padding: 0; border: 1px solid #73abf5; border-radius: 8px;
-  color: #245a98; background: #ffffff; font: inherit; font-weight: 700; line-height: 1;
+  color: #245a98; background: #ffffff; font: inherit; font-weight: 400; line-height: 1;
   text-align: center; cursor: pointer;
 `;
 export const Metrics = styled.dl`
@@ -78,7 +90,7 @@ export const Metric = styled.div`
   display: flex; justify-content: space-between; gap: 8px; color: #526176; font-size: 0.84rem;
 `;
 export const MetricValue = styled.dd`
-  margin: 0; color: #18212f; font-weight: 600; text-align: right;
+  margin: 0; color: #18212f; font-weight: 400; text-align: right;
 `;
 export const PerformanceValue = styled(MetricValue)<{ $color: string }>`
   color: ${({ $color }) => $color};

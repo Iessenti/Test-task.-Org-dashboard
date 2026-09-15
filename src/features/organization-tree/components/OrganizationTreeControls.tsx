@@ -8,12 +8,10 @@ export function OrganizationTreeControls({
     onZoomIn,
     onZoomOut,
     onFit,
-    onReset,
 }: {
     onZoomIn: () => void;
     onZoomOut: () => void;
     onFit: () => void;
-    onReset: () => void;
 }) {
     return (
         <CanvasControls aria-label="Управление canvas" role="group">
@@ -33,9 +31,6 @@ export function OrganizationTreeControls({
             </CanvasControl>
             <CanvasControl aria-label="Fit view" onClick={onFit} type="button">
                 Вписать
-            </CanvasControl>
-            <CanvasControl onClick={onReset} type="button">
-                Сбросить
             </CanvasControl>
         </CanvasControls>
     );

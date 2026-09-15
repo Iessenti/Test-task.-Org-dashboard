@@ -1,6 +1,7 @@
-import type { Dispatch, KeyboardEvent, SetStateAction } from "react";
+import type { KeyboardEvent } from "react";
 import type { OrgNodeDto } from "@/data/org-tree/org-tree-validation";
 import type { LayoutNode } from "@/features/organization-tree/model/canvas-layout";
+import { formatMetricNumber } from "@/data/org-tree/number-formatters";
 import { BranchToggleIcon } from "./BranchToggleIcon";
 import {
     Metric,
@@ -43,7 +44,7 @@ export function OrganizationTreeNode({
     isPanning: boolean;
     isSelected: boolean;
     onToggle: () => void;
-    onSelect: Dispatch<SetStateAction<string | null>>;
+    onSelect: (_nodeId: string) => void;
     onClick: () => void;
 }) {
     const performanceBand = getPerformanceBand(node.performance);
@@ -55,6 +56,7 @@ export function OrganizationTreeNode({
     return (
         <NodeCard
             key={node.id}
+            data-node-id={node.id}
             $isPanning={isPanning}
             $isSelected={isSelected}
             $x={renderedPosition.x}
@@ -98,7 +100,7 @@ export function OrganizationTreeNode({
                         $color={performanceBand.color}
                         aria-label={`Эффективность: ${performanceBand.label}, ${node.performance}`}
                     >
-                        {performanceBand.label}: {node.performance}
+                        {performanceBand.label}: {formatMetricNumber(node.performance)}
                     </PerformanceValue>
                 </Metric>
             </Metrics>

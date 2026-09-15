@@ -1,8 +1,10 @@
-import { useRef, useState, type MutableRefObject, type PointerEvent, type RefObject, type WheelEvent } from 'react';
+import { useCallback, useRef, useState, type MutableRefObject, type PointerEvent, type RefObject, type WheelEvent } from 'react';
 import {
   MAX_ZOOM,
   MIN_ZOOM,
   ZOOM_STEP,
+  CARD_HEIGHT,
+  CARD_WIDTH,
   type CanvasLayout,
 } from '@/features/organization-tree/model/canvas-layout';
 
@@ -107,8 +109,6 @@ export function useCanvasViewport(
     setIsPanning(false);
   };
 
-  const resetView = () => setViewport({ offsetX: 0, offsetY: 0, scale: 1 });
-
   const consumePan = () => {
     const moved = panMovedRef.current;
     panMovedRef.current = false;
@@ -126,6 +126,18 @@ export function useCanvasViewport(
     });
   };
 
+  const centerOn = useCallback((id: string) => {
+    const position = layout.positions[id];
+    const element = canvasViewportRef.current;
+    if (position === undefined || element === null) return;
+
+    setViewport((currentViewport) => ({
+      ...currentViewport,
+      offsetX: element.clientWidth / 2 - (position.x + CARD_WIDTH / 2) * currentViewport.scale,
+      offsetY: element.clientHeight / 2 - (position.y + CARD_HEIGHT / 2) * currentViewport.scale,
+    }));
+  }, [canvasViewportRef, layout.positions]);
+
   return {
     viewport,
     isPanning,
@@ -135,7 +147,7 @@ export function useCanvasViewport(
     handlePointerDown,
     handlePointerMove,
     stopPanning,
-    resetView,
     fitView,
+    centerOn,
   };
 }

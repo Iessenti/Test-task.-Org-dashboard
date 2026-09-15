@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { calculateOrgAggregates } from './org-tree-aggregation';
 
 export const orgNodeSchema = z.object({
   id: z.string(),
@@ -14,11 +15,18 @@ export const orgTreeSchema = z.array(orgNodeSchema);
 
 export type OrgNodeDto = z.infer<typeof orgNodeSchema>;
 
+export type OrgAggregate = {
+  totalHeadcount: number;
+  totalBudget: number;
+  weightedPerformanceSum: number;
+};
+
 export type OrgSnapshot = {
   nodesById: Record<string, OrgNodeDto>;
   rootIds: string[];
   childrenByParentId: Record<string, string[]>;
   depthById: Record<string, number>;
+  aggregatesById: Record<string, OrgAggregate>;
 };
 
 export function parseOrgTreePayload(payload: unknown): OrgNodeDto[] {
@@ -101,11 +109,14 @@ export function normalizeOrgTree(nodes: readonly OrgNodeDto[]): OrgSnapshot {
     getDepth(node.id);
   }
 
+  const aggregatesById = calculateOrgAggregates({ nodesById, childrenByParentId });
+
   return {
     nodesById,
     rootIds,
     childrenByParentId,
     depthById,
+    aggregatesById,
   };
 }
 
