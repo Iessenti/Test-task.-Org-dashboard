@@ -37,10 +37,10 @@
 
 ### Foundation dashboard and tree
 
-- [ ] 1.21 Implement distinct initial loading, error, and valid-empty dashboard states driven directly by the query resource; verify focused component tests cover transport, HTTP, parsing, validation, and empty outcomes without mirroring server data in local state.
-- [ ] 1.22 Render the normalized hierarchy as a tree with the approved initial expansion interpretation; verify a component test proves the required second hierarchy level is visible on first display.
-- [ ] 1.23 Add accessible expand/collapse controls for branches while keeping expansion as client interaction state; verify keyboard and pointer interaction tests cover expanding, collapsing, and leaf behavior.
-- [ ] 1.24 Present each visible node’s name, raw headcount, and approved accessible performance indicator; verify component assertions and a browser check confirm the meaning is not conveyed by color alone.
+- [x] 1.21 Implement distinct initial loading, error, and valid-empty dashboard states driven directly by the query resource; verify focused component tests cover transport, HTTP, parsing, validation, and empty outcomes without mirroring server data in local state.
+- [x] 1.22 Render the normalized hierarchy as a tree with the approved initial expansion interpretation; verify a component test proves the required second hierarchy level is visible on first display.
+- [x] 1.23 Add accessible expand/collapse controls for branches while keeping expansion as client interaction state; verify keyboard and pointer interaction tests cover expanding, collapsing, and leaf behavior.
+- [x] 1.24 Present each visible node’s name, raw headcount, and approved accessible performance indicator; verify component assertions and a browser check confirm the meaning is not conveyed by color alone.
 - [ ] 1.25 Run a Foundation UI checkpoint in the browser for loading, error, empty, initial tree, expansion, collapse, and node content; record observable results before stage documentation and review.
 
 ### Foundation documentation and stage closure

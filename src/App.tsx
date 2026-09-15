@@ -1,4 +1,5 @@
 import { createGlobalStyle, styled } from 'styled-components';
+import { OrganizationDashboard } from '@/features/organization/OrganizationDashboard';
 
 const GlobalStyle = createGlobalStyle`
   :root {
@@ -36,6 +37,7 @@ export function App() {
       <GlobalStyle />
       <AppShell aria-labelledby="app-title">
         <Title id="app-title">Staff Pulse</Title>
+        <OrganizationDashboard />
       </AppShell>
     </>
   );

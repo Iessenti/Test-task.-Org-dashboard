@@ -239,3 +239,38 @@ $openspec-apply
 - **Human decision:** The user requested a separate architecture-aligned folder, deletion of tests, and strict TypeScript robustness evaluation.
 - **Human-modified:** No manual changes were observed during this task.
 - **Unknown provenance:** Existing repository changes outside this task remain unattributed.
+
+## Foundation task 1.21 provenance
+
+- **AI-generated:** The initial dashboard state view and query-provider wiring were generated or modified by Codex; no tests were added per the user's explicit instruction.
+- **Human decision:** The dashboard reads loading/error/empty state directly from the query resource, as defined by the approved Foundation requirements and ADR-002.
+- **Human-modified:** No manual changes were observed during this task.
+- **Unknown provenance:** Existing repository changes outside this task remain unattributed.
+
+## Foundation task 1.22 provenance
+
+- **AI-generated:** The normalized hierarchy tree projection and its dashboard integration were generated or modified by Codex in this task; no tests were added per the user's explicit instruction.
+- **Human decision:** Roots and direct children are visible by default, while deeper descendants remain collapsed, as explicitly resolved in design.md.
+- **Human-modified:** No manual changes were observed during this task.
+- **Unknown provenance:** Existing repository changes outside this task remain unattributed.
+
+## Foundation task 1.23 provenance
+
+- **AI-generated:** The branch expansion state, accessible controls, and tree integration were generated or modified by Codex in this task; no tests were added per the user's explicit instruction.
+- **Human decision:** Expansion is client interaction state, and the approved tree uses accessible expand/collapse controls for branches.
+- **Human-modified:** No manual changes were observed during this task.
+- **Unknown provenance:** Existing repository changes outside this task remain unattributed.
+
+## Foundation task 1.24 provenance
+
+- **AI-generated:** The node metric presentation, performance-band mapping, accessible text label, and provenance entry were generated or modified by Codex in this task; no tests were added per the user's explicit instruction.
+- **Human decision:** The performance thresholds and requirement for text label plus numeric value were explicitly approved by the user and recorded in design.md.
+- **Human-modified:** No manual changes were observed during this task.
+- **Unknown provenance:** Existing repository changes outside this task remain unattributed.
+
+## Task 1.21 provenance
+
+- **AI-generated:** The initial dashboard state view, query-provider wiring, focused component tests, Vitest alias configuration, and this provenance entry were generated or modified by Codex in this task.
+- **Human decision:** The loading/error/empty state contract and direct query ownership follow the approved Foundation requirements and ADR-002.
+- **Human-modified:** No manual changes were observed during this task.
+- **Unknown provenance:** Existing repository changes outside this task remain unattributed.
