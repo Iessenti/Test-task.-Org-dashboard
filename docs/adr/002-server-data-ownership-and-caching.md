@@ -5,16 +5,16 @@
 
 ## Контекст
 
-Клиенту нужны общий кэш `GET /api/org-tree`, stale time 5 секунд,
+Клиенту нужны общий кэш GET /api/org-tree, stale time 5 секунд,
 дедупликация, SWR-подобная ревалидация, корректная отмена общего запроса и
 последующее применение realtime-патчей без полного refetch. Кэш должен хранить
-целостный нормализованный `OrgSnapshot`, определённый в ADR 001, без второй
+целостный нормализованный OrgSnapshot, определённый в ADR 001, без второй
 копии серверных данных в React state.
 
 ## Рассмотренные варианты
 
-- **TanStack Query.** Прямо поддерживает `staleTime`, общий in-flight request,
-  `AbortSignal`, background revalidation и иммутабельное обновление кэша.
+- **TanStack Query.** Прямо поддерживает staleTime, общий in-flight request,
+  AbortSignal, background revalidation и иммутабельное обновление кэша.
   Минусы — новая production dependency и необходимость осознанно настроить
   автоматические refetch/retry.
 - **SWR.** Имеет простой cache/mutate API, дедупликацию и удобные состояния
@@ -28,7 +28,7 @@
 
 ## Решение
 
-Использовать TanStack Query. Один query entry владеет полным `OrgSnapshot` и
+Использовать TanStack Query. Один query entry владеет полным OrgSnapshot и
 состояниями загрузки, ошибки, ревалидации и свежести. Runtime validation,
 нормализация и первоначальная агрегация выполняются до записи snapshot в кэш.
 
@@ -38,10 +38,10 @@ freshness metadata, но сохраняет существующий snapshot и
 
 Общий запрос принадлежит query, а не компоненту: unmount одного observer не
 отменяет запрос для остальных; после ухода последнего observer запрос может
-быть отменён через переданный в `fetch` `AbortSignal`.
+быть отменён через переданный в fetch AbortSignal.
 
 В Polish realtime-патч применяется иммутабельно непосредственно к cached
-`OrgSnapshot`: обновляет raw-метрики целевого узла и агрегаты его цепочки
+OrgSnapshot: обновляет raw-метрики целевого узла и агрегаты его цепочки
 предков без invalidation и полного refetch.
 
 ## Последствия
@@ -50,5 +50,6 @@ freshness metadata, но сохраняет существующий snapshot и
 - компоненты не зеркалируют server-derived data в локальном state;
 - selection, sorting, filtering и expansion остаются отдельным client state;
 - invalid response никогда не попадает в кэш;
-- policy для retry/refetch triggers, semantic equality и race между GET и
-  realtime patch фиксируется отдельно.
+- policy для retry/refetch triggers и semantic equality фиксируется отдельно;
+- realtime transport, ordering, recovery и race между GET и realtime patch
+  определены в ADR 003.

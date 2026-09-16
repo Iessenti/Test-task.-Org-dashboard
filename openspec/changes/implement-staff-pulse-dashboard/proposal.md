@@ -51,8 +51,9 @@ None. The project has no existing capability specifications.
 - Uses the accepted normalized `OrgSnapshot` and aggregation model from ADR 001.
 - Uses TanStack Query as the single owner of cached server-derived state, as
   accepted in ADR 002; components do not mirror that state.
-- Leaves the realtime transport and its protocol/order/recovery semantics to
-  explicit human decisions before their dependent implementation tasks begin.
+- Requires an explicit human decision on realtime transport and
+  protocol/order/recovery semantics before their dependent implementation tasks
+  begin; the accepted result is recorded in ADR 003.
 - Defers mobile-specific presentation and all optional Bonus behavior until the
   Bonus decision gate after Polish.
 - Adds no authentication, database, or UI component library.

@@ -2,8 +2,7 @@
 
 See `proposal.md` for motivation and the capability specs for observable
 behavior. This is a greenfield implementation constrained by the original
-four-stage assignment, a two-to-three-day scope, ADR 001, ADR 002, and the
-accepted metric-only realtime patch decision.
+four-stage assignment, a two-to-three-day scope, ADR 001, ADR 002, and ADR 003.
 
 The repository currently contains planning and decision records but no
 application implementation. Foundation must establish boundaries that support
@@ -27,7 +26,7 @@ Core and Polish without implementing those later stages early.
   or realtime mutation scope.
 - Adding authentication, persistence, user-driven organization editing, or
   structural realtime mutations.
-- Selecting or designing the realtime transport before human review.
+- Reopening the human-approved realtime transport and consistency protocol.
 - Designing or implementing the optional Bonus stage before mandatory work is
   complete.
 
@@ -43,10 +42,9 @@ aggregates, cache reconciliation, and presentation state.
 The mock server is implemented directly with Node's built-in `node:http` API,
 without a server-framework dependency. Vite's development proxy routes client
 API requests to the separately running server, so the standard development path
-does not require browser CORS handling. `node:http` also supports streaming if
-SSE is selected later, but this server choice does not select or design the
-realtime transport; a different approved transport may still require its own
-protocol support.
+does not require browser CORS handling. In Polish, the same HTTP boundary hosts
+the SSE stream selected in ADR 003; transport ordering, recovery, and cache
+reconciliation remain explicit application responsibilities.
 
 This keeps the API contract observable, avoids embedding mock data in UI
 modules, and keeps the Foundation server dependency surface small. The trade-off
@@ -184,9 +182,9 @@ background revalidation error preserves the last valid snapshot and exposes a
 non-blocking failure notice.
 
 The header uses a compact realtime badge with `Live`, `Reconnecting…`, and
-`Offline` states. Connection loss does not disable the dashboard. The exact
-transport, patch protocol, ordering/recovery policy, and backoff cap/jitter
-remain open until the Polish transport gate is resolved.
+`Offline` states. Connection loss does not disable the dashboard. ADR 003
+defines the selected SSE transport, patch protocol, ordering/recovery policy,
+and deterministic capped reconnect backoff.
 
 An accepted metric patch locally fades only the changed raw metric and the
 affected aggregate values on the target and ancestor rows/cards. A repeated
@@ -246,10 +244,10 @@ proceeds Foundation → Core → Polish, with a verified commit and tag at each
 boundary. A stage can be rolled back to the previous stage tag without data
 migration. Bonus, if approved later, starts only from the completed Polish tag.
 
-## Unresolved Decisions / Human Review Gates
+## Human Review Gates and Resolved Decisions
 
-The following decisions are intentionally not resolved by this proposal and
-must be reviewed before their dependent implementation begins:
+The following decisions were intentionally held for human review before their
+dependent implementation began and are now recorded with their resolutions:
 
 ### Before Foundation implementation
 
@@ -313,7 +311,8 @@ must be reviewed before their dependent implementation begins:
   SSE is selected because Polish requires server-to-client updates only and
   the browser provides connection lifecycle support without adding a
   bidirectional protocol. The stream is owned by the dashboard resource and
-  must be explicitly cleaned up when its final consumer leaves.
+  must be explicitly cleaned up when its final consumer leaves. ADR 003 records
+  the transport alternatives and the complete consistency protocol.
 - **Resolved 2026-09-15 — patch ordering, recovery, and freshness.** Treat
   `sequence` as a global monotonic event number. Ignore events whose sequence
   is less than or equal to the last applied sequence. Apply the next
