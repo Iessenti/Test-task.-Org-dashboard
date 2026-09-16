@@ -17,7 +17,7 @@ export function recalculateOrgAggregateChain({
   let currentId: string | null = targetId;
 
   while (currentId !== null) {
-    const node = nodesById[currentId];
+    const node: OrgNodeDto | undefined = nodesById[currentId];
     if (node === undefined) throw new Error(`Cannot recalculate unknown organization node: ${currentId}`);
     const aggregate = (childrenByParentId[currentId] ?? []).reduce<OrgAggregate>(
       (total, childId) => {

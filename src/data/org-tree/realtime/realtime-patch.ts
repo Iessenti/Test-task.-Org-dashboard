@@ -17,7 +17,8 @@ export function applyRealtimeMetricPatch(
     throw new Error(`Cannot patch unknown organization node: ${patch.nodeId}`);
   }
 
-  const changedMetrics = Object.keys(patch.metrics).filter((metric) => (
+  const metricKeys = Object.keys(patch.metrics) as Array<keyof RealtimeMetricPatch['metrics']>;
+  const changedMetrics = metricKeys.filter((metric) => (
     patch.metrics[metric] !== currentNode[metric]
   ));
   if (changedMetrics.length === 0) {

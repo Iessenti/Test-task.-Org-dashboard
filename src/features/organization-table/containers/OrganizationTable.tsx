@@ -43,6 +43,11 @@ export function OrganizationTable({ snapshot, selectedNodeId, onSelectNode, feed
     : rows[0]?.id ?? null;
 
   const tableSurfaceRef = useRef<HTMLDivElement>(null);
+  const sortClickTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  useEffect(() => () => {
+    if (sortClickTimerRef.current !== undefined) clearTimeout(sortClickTimerRef.current);
+  }, []);
   const focusRow = (rowId: string) => {
     setFocusedRowId(rowId);
     requestAnimationFrame(() => {
@@ -85,15 +90,28 @@ export function OrganizationTable({ snapshot, selectedNodeId, onSelectNode, feed
       selectedRow?.focus({ preventScroll: true });
     });
     return () => cancelAnimationFrame(frame);
-  }, [rows, selectedNodeId]);
+  }, [selectedNodeId]);
 
   const handleSortInteraction = (interaction: TableSortInteraction) => {
     if (interaction.kind === 'click' && interaction.clickCount === 1) {
+      if (sortClickTimerRef.current !== undefined) clearTimeout(sortClickTimerRef.current);
+      sortClickTimerRef.current = setTimeout(() => {
+        sortClickTimerRef.current = undefined;
+        setSort((currentSort) => cycleSort(currentSort, interaction.column));
+      }, 250);
+      return;
+    }
+
+    if (interaction.kind === 'click' && interaction.clickCount === 0) {
       setSort((currentSort) => cycleSort(currentSort, interaction.column));
       return;
     }
 
     if (interaction.kind === 'double-click') {
+      if (sortClickTimerRef.current !== undefined) {
+        clearTimeout(sortClickTimerRef.current);
+        sortClickTimerRef.current = undefined;
+      }
       setSort((currentSort) => {
         const nextSort = reverseSort(currentSort, interaction.column);
         return nextSort === null

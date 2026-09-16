@@ -48,6 +48,7 @@ export function OrganizationDashboardView({ query, selectedNodeId, onSelectNode,
         <RealtimeStatus $status={realtimeStatus} role="status" aria-label="Статус соединения">
           {realtimeStatusLabel}
         </RealtimeStatus>
+        {query.isFetching && <BackgroundStatus role="status">Обновляем…</BackgroundStatus>}
         {query.isError && <BackgroundStatus role="status">Не удалось обновить данные. Показана последняя версия.</BackgroundStatus>}
       </StatusGroup>
       <ModeSwitch aria-label="Представление организации">

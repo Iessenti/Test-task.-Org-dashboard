@@ -5,8 +5,8 @@ export type RealtimeMessageEvent = {
 };
 
 export type RealtimeEventSource = {
-  onopen: (() => void) | null;
-  onerror: (() => void) | null;
+  onopen: ((_event: Event) => void) | null;
+  onerror: ((_event: Event) => void) | null;
   onmessage: ((_event: RealtimeMessageEvent) => void) | null;
   close: () => void;
 };
