@@ -1,6 +1,6 @@
 import type { TableColumn, TableSort, TableSortInteraction } from '@/features/organization-table/model/table-sorting';
 import { SortDirectionIcon } from './SortDirectionIcon';
-import { SearchInput } from './OrganizationTableHeader.style';
+import { AiSearchButton, AiSearchGlyph, AiSearchSpinner, AiSearchStatus, SearchInput, SearchToolbar } from './OrganizationTableHeader.style';
 
 const sortableHeaders: Array<{ column: TableColumn; label: string }> = [
   { column: 'subdivision', label: 'Подразделение' },
@@ -14,18 +14,33 @@ export function OrganizationTableHeader({
   filterInput,
   sort,
   onFilterChange,
+  onAiSearch,
+  aiSearching,
+  aiError,
   onSortInteraction,
 }: {
   filterInput: string;
   sort: TableSort;
   onFilterChange: (_value: string) => void;
+  onAiSearch: () => void;
+  aiSearching: boolean;
+  aiError: string | null;
   onSortInteraction: (_interaction: TableSortInteraction) => void;
 }) {
   return (
     <thead>
       <tr>
         <th colSpan={5}>
-          <SearchInput id="organization-search" aria-label="Поиск" placeholder="Поиск" value={filterInput} onChange={(event) => onFilterChange(event.target.value)} />
+          <SearchToolbar>
+            <SearchInput id="organization-search" aria-label="Поиск по организации" placeholder="Например: команды с эффективностью выше 80" value={filterInput} onChange={(event) => onFilterChange(event.target.value)} />
+            <AiSearchButton type="button" aria-busy={aiSearching} onClick={onAiSearch} disabled={aiSearching || filterInput.trim() === ''}>
+              {aiSearching ? <AiSearchSpinner aria-hidden="true" /> : <AiSearchGlyph aria-hidden="true">✦</AiSearchGlyph>}
+              {aiSearching ? 'Обрабатываем…' : 'AI-поиск'}
+            </AiSearchButton>
+            {aiError !== null
+              ? <AiSearchStatus $error role="alert" aria-live="polite">{aiError}</AiSearchStatus>
+              : <AiSearchStatus aria-live="polite">Введите запрос на естественном языке — AI преобразует его в фильтр.</AiSearchStatus>}
+          </SearchToolbar>
         </th>
       </tr>
       <tr>

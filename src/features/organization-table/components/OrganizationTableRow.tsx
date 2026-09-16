@@ -1,7 +1,7 @@
 import type { KeyboardEvent } from 'react';
 import { formatAveragePerformance, formatBudget } from '@/features/organization-table/model/formatters';
 import type { OrganizationTableRow as OrganizationTableRowData } from '@/features/organization-table/model/table-rows';
-import type { RealtimeFeedbackController } from '@/data/org-tree/use-realtime-feedback';
+import type { RealtimeFeedbackController } from '@/data/org-tree/hooks/use-realtime-feedback';
 import { FeedbackValue } from '@/features/organization-table/containers/OrganizationTable.style';
 
 export function OrganizationTableRow({ row, isSelected, onFocus, onKeyDown, onSelect, feedback, tabIndex }: {

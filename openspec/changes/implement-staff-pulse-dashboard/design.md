@@ -341,7 +341,18 @@ must be reviewed before their dependent implementation begins:
 
 ### Before optional Bonus implementation
 
-- Whether Bonus will be undertaken at all.
-- Mobile-specific map/table presentation and responsive card/table behavior.
-- Gzip size measurement scope, container/deployment topology, and AI provider or
-  local interpretation strategy.
+- **Resolved 2026-09-16 — Bonus undertaking.** Bonus is approved and may be
+  implemented after the completed mandatory `step/3` state. Bonus remains
+  optional and is not a prerequisite for Foundation, Core, or Polish.
+- **Resolved 2026-09-16 — Bonus mobile presentation.** On mobile, the canvas
+  retains automatic hierarchy layout with pan, zoom, and `Fit view`; cards use
+  a compact responsive size and the detail panel opens as a bottom sheet. The
+  table remains complete with horizontal scrolling and a sticky header. The
+  mode switch and canvas controls remain accessible without changing mandatory
+  desktop behavior.
+- **Resolved 2026-09-16 — Bonus production and AI boundaries.** Use a
+  `docker-compose` topology containing client, server, and Nginx; supply only
+  runtime configuration through `.env`, with no secrets baked into images.
+  Measure gzip size for production JavaScript and CSS assets only, excluding
+  Brotli and unrelated files. Use an external AI provider through a server-side
+  adapter, configured by runtime environment.

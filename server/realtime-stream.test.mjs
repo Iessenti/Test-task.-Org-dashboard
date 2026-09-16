@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { once } from 'node:events';
 import { request } from 'node:http';
 import test from 'node:test';
-import orgTreeFixture from './org-tree.json' with { type: 'json' };
+import orgTreeFixture from './fixtures/org-tree.json' with { type: 'json' };
 import { createMockServer } from './app.mjs';
 
 function readEvents(response, count) {

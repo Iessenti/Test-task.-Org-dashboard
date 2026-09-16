@@ -1,5 +1,5 @@
-import type { OrgSnapshot } from '@/data/org-tree/org-tree-validation';
-import type { OrganizationTableRow } from './table-rows';
+import type { OrgSnapshot } from '@/data/org-tree/model/org-tree-types';
+import type { OrganizationTableRow } from './table-types';
 
 export function filterOrganizationTableRows(
   rows: readonly OrganizationTableRow[],

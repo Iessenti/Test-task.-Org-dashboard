@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import orgTreeFixture from './org-tree.json' with { type: 'json' };
-import { createMetricChangeGenerator, createRealtimeMetricChangeGenerator, createScriptedMetricChangeGenerator } from './realtime-generator.mjs';
+import orgTreeFixture from './fixtures/org-tree.json' with { type: 'json' };
+import { createMetricChangeGenerator, createRealtimeMetricChangeGenerator, createScriptedMetricChangeGenerator } from './realtime/realtime-generator.mjs';
 
 test('metric generator is deterministic and changes only bounded metrics', () => {
   const first = createMetricChangeGenerator(orgTreeFixture);

@@ -1,4 +1,4 @@
-import type { OrgSnapshot } from '@/data/org-tree/org-tree-validation';
+import type { OrgSnapshot } from '@/data/org-tree/model/org-tree-types';
 
 export const CARD_WIDTH = 232;
 export const CARD_HEIGHT = 216;

@@ -1,12 +1,11 @@
 import { useCallback, useRef, useState, type Dispatch, type SetStateAction } from 'react';
-import { useOrgTreeQuery } from '@/data/org-tree/org-tree-query';
-import { useRealtimeConnection } from '@/data/org-tree/use-realtime-connection';
-import type { RealtimeConnection } from '@/data/org-tree/realtime-connection';
-import { orgTreeQueryClient } from '@/data/org-tree/org-tree-query';
-import { createRealtimeCacheUpdater } from '@/data/org-tree/org-tree-realtime-cache';
-import { useRealtimeFeedback } from '@/data/org-tree/use-realtime-feedback';
-import { useRealtimeNotifications } from '@/data/org-tree/use-realtime-notifications';
-import type { OrgSnapshot } from '@/data/org-tree/org-tree-validation';
+import { useOrgTreeQuery, orgTreeQueryClient } from '@/data/org-tree/resource/org-tree-query';
+import { useRealtimeConnection } from '@/data/org-tree/hooks/use-realtime-connection';
+import type { RealtimeConnection } from '@/data/org-tree/realtime/realtime-connection';
+import { createRealtimeCacheUpdater } from '@/data/org-tree/realtime/org-tree-realtime-cache';
+import { useRealtimeFeedback } from '@/data/org-tree/hooks/use-realtime-feedback';
+import { useRealtimeNotifications } from '@/data/org-tree/hooks/use-realtime-notifications';
+import type { OrgSnapshot } from '@/data/org-tree/model/org-tree-types';
 import { OrganizationDashboardView } from './OrganizationDashboardView';
 
 export type DashboardMode = 'canvas' | 'table';

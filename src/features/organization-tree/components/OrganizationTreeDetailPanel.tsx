@@ -1,6 +1,6 @@
-import type { OrgSnapshot } from '@/data/org-tree/org-tree-validation';
-import { formatTimestamp } from '@/data/org-tree/date-formatters';
-import { formatMetricNumber } from '@/data/org-tree/number-formatters';
+import type { OrgSnapshot } from '@/data/org-tree/model/org-tree-types';
+import { formatTimestamp } from '@/data/org-tree/formatting/date-formatters';
+import { formatMetricNumber } from '@/data/org-tree/formatting/number-formatters';
 import {
   DetailChildren,
   DetailCloseButton,
