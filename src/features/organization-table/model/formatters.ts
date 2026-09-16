@@ -5,4 +5,4 @@ export function formatBudget(budget: number): string {
 export function formatAveragePerformance(averagePerformance: number | null): string {
   return averagePerformance === null ? '—' : formatMetricNumber(averagePerformance);
 }
-import { formatMetricNumber } from '@/data/org-tree/number-formatters';
+import { formatMetricNumber } from '@/data/org-tree/formatting/number-formatters';

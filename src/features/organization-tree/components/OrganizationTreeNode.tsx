@@ -1,10 +1,10 @@
 import type { KeyboardEvent } from "react";
-import type { OrgNodeDto } from "@/data/org-tree/org-tree-validation";
+import type { OrgNodeDto } from "@/data/org-tree/model/org-tree-types";
 import type { LayoutNode } from "@/features/organization-tree/model/canvas-layout";
-import type { RealtimeFeedbackController } from "@/data/org-tree/use-realtime-feedback";
-import type { OrgAggregate } from "@/data/org-tree/org-tree-validation";
-import { getAveragePerformance } from "@/data/org-tree/org-tree-aggregation";
-import { formatMetricNumber } from "@/data/org-tree/number-formatters";
+import type { RealtimeFeedbackController } from "@/data/org-tree/hooks/use-realtime-feedback";
+import type { OrgAggregate } from "@/data/org-tree/model/org-tree-types";
+import { getAveragePerformance } from "@/data/org-tree/aggregation/org-tree-aggregation";
+import { formatMetricNumber } from "@/data/org-tree/formatting/number-formatters";
 import { BranchToggleIcon } from "./BranchToggleIcon";
 import {
     Metric,

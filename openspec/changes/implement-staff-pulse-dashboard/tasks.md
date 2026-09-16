@@ -168,23 +168,23 @@ not applicable; they do not block completion or delivery of Foundation, Core, or
 
 ### Bonus decision gates
 
-- [ ] 4.1 After the mandatory `step/3` state is complete, obtain the human decision whether to undertake Bonus; verify the decision is recorded without changing the completion status of any mandatory stage.
-- [ ] 4.2 If Bonus is approved, obtain human approval for container/deployment topology, `.env` configuration boundary, accepted gzip measurement scope, and AI provider or local interpretation strategy; verify the approved design introduces no prerequisite for mandatory behavior before Bonus implementation starts.
-- [ ] 4.2a If Bonus is approved, obtain human approval for mobile-specific canvas/table presentation and responsive card/table behavior; verify the responsive design remains isolated from mandatory stage scope.
+- [x] 4.1 After the mandatory `step/3` state is complete, obtain the human decision whether to undertake Bonus; verify the decision is recorded without changing the completion status of any mandatory stage.
+- [x] 4.2 If Bonus is approved, obtain human approval for container/deployment topology, `.env` configuration boundary, accepted gzip measurement scope, and AI provider or local interpretation strategy; verify the approved design introduces no prerequisite for mandatory behavior before Bonus implementation starts.
+- [x] 4.2a If Bonus is approved, obtain human approval for mobile-specific canvas/table presentation and responsive card/table behavior; verify the responsive design remains isolated from mandatory stage scope.
 
 ### Containerized production delivery
 
-- [ ] 4.3 If Bonus is approved, package the client and server for `.env`-driven startup through `docker-compose up`; verify both processes start together and the dashboard reaches the API with the documented configuration.
-- [ ] 4.4 If Bonus is approved, configure Nginx to serve the production client and proxy API traffic; verify runtime requests load the dashboard and API successfully through the Nginx entry point.
-- [ ] 4.5 If Bonus is approved, enable gzip delivery and implement the approved reproducible frontend-size measurement; verify response encoding and measured production assets are no larger than 200 KB gzip.
-- [ ] 4.6 Run a deployment checkpoint from a clean container build through application use and shutdown; verify no undocumented local tool or environment value is required beyond the approved `.env` contract.
+- [x] 4.3 If Bonus is approved, package the client and server for `.env`-driven startup through `docker-compose up`; verify both processes start together and the dashboard reaches the API with the documented configuration.
+- [x] 4.4 If Bonus is approved, configure Nginx to serve the production client and proxy API traffic; verify runtime requests load the dashboard and API successfully through the Nginx entry point.
+- [x] 4.5 If Bonus is approved, enable gzip delivery and implement the approved reproducible frontend-size measurement; verify response encoding and measured production assets are no larger than 200 KB gzip.
+- [x] 4.6 Run a deployment checkpoint from a clean container build through application use and shutdown; verify no undocumented local tool or environment value is required beyond the approved `.env` contract.
 
 ### Natural-language search
 
-- [ ] 4.7 If Bonus is approved, define and validate the approved structured filter response at the AI boundary; verify focused tests reject malformed or unsupported AI output before it can affect client filtering.
-- [ ] 4.8 If Bonus is approved, connect natural-language input to successful AI interpretation and apply the validated structured filter entirely on the client; verify an integration test covers a representative successful query and matching row set.
-- [ ] 4.9 If Bonus is approved, fall back to the existing text search when AI interpretation is unavailable, fails, or returns invalid output; verify focused tests cover provider failure, malformed output, and fallback results without breaking mandatory filtering.
-- [ ] 4.10 Run an AI-search checkpoint for success, validation failure, provider failure, debounce/interaction compatibility, and mandatory-search regression; record observable results before Bonus review.
+- [x] 4.7 If Bonus is approved, define and validate the approved structured filter response at the AI boundary; verify focused tests reject malformed or unsupported AI output before it can affect client filtering.
+- [x] 4.8 If Bonus is approved, connect natural-language input to successful AI interpretation and apply the validated structured filter entirely on the client; verify an integration test covers a representative successful query and matching row set.
+- [x] 4.9 If Bonus is approved, fall back to the existing text search when AI interpretation is unavailable, fails, or returns invalid output; verify focused tests cover provider failure, malformed output, and fallback results without breaking mandatory filtering.
+- [x] 4.10 Run an AI-search checkpoint for success, validation failure, provider failure, debounce/interaction compatibility, and mandatory-search regression; record observable results before Bonus review.
 
 ### Bonus documentation and stage closure
 

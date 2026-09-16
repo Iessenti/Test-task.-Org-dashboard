@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import orgTreeFixture from './org-tree.json' with { type: 'json' };
-import { assertMetricPatchContract } from './realtime-contract.mjs';
+import orgTreeFixture from './fixtures/org-tree.json' with { type: 'json' };
+import { assertMetricPatchContract } from './realtime/realtime-contract.mjs';
 
 const knownNodeIds = new Set(orgTreeFixture.map((node) => node.id));
 const validEvent = {

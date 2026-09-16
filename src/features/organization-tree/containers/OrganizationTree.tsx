@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { OrgSnapshot } from '@/data/org-tree/org-tree-validation';
+import type { OrgSnapshot } from '@/data/org-tree/model/org-tree-types';
 import {
   buildLayout,
   getTopologySignature,
@@ -16,7 +16,7 @@ import { OrganizationTreeControls } from '@/features/organization-tree/component
 import { OrganizationTreeEdges } from '@/features/organization-tree/components/OrganizationTreeEdges';
 import { OrganizationTreeNode } from '@/features/organization-tree/components/OrganizationTreeNode';
 import { OrganizationTreeDetailPanel } from '@/features/organization-tree/components/OrganizationTreeDetailPanel';
-import type { RealtimeFeedbackController } from '@/data/org-tree/use-realtime-feedback';
+import type { RealtimeFeedbackController } from '@/data/org-tree/hooks/use-realtime-feedback';
 
 export function OrganizationTree({
   snapshot,

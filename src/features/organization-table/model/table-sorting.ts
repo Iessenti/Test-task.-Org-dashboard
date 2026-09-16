@@ -1,6 +1,7 @@
-import type { OrganizationTableRow } from './table-rows';
+import type { OrganizationTableRow, TableColumn } from './table-types';
 
-export type TableColumn = keyof Pick<OrganizationTableRow, 'subdivision' | 'level' | 'totalEmployees' | 'totalBudget' | 'averagePerformance'>;
+export type { TableColumn } from './table-types';
+
 export type SortDirection = 'asc' | 'desc';
 export type TableSort = { column: TableColumn; direction: SortDirection } | null;
 export type TableSortInteraction = {

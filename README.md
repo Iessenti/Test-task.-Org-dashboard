@@ -14,6 +14,99 @@ npm run dev
 `GET /api/org-tree`; запросы к нему в development проходят через Vite proxy.
 Порт API можно изменить через `API_PORT` в `.env`.
 
+## Docker и Nginx (Bonus)
+
+Production-вариант запуска доступен одной командой:
+
+```bash
+docker compose up --build
+```
+
+Compose поднимает API и production-сборку клиента, а Nginx отдаёт статику и
+проксирует `/api/`. Конфигурация использует `.env`, healthcheck API, ожидание
+готовности сервера, автоматический restart и запуск API без root.
+
+Для сохранения фокуса тестового задания здесь намеренно не добавлены TLS,
+rate limiting, отдельный сборщик логов и resource limits: это инфраструктура
+внешнего production-окружения, а не часть требуемого frontend-сценария.
+
+### Холодный запуск и проверка Docker
+
+1. Убедитесь, что Docker Desktop/OrbStack запущен и в корне есть `.env`.
+2. Для обычного режима выполните:
+
+   ```bash
+   docker compose up --build
+   ```
+
+3. Откройте <http://localhost/>. Nginx должен отдать клиент, а запрос клиента
+   к `/api/org-tree` должен пройти через Nginx к контейнеру `server`.
+4. В другом терминале проверьте API напрямую через entrypoint:
+
+   ```bash
+   curl -i http://localhost/api/health
+   curl -i http://localhost/api/org-tree
+   ```
+
+5. Для остановки и удаления контейнеров используйте:
+
+   ```bash
+   docker compose down
+   ```
+
+Compose подставляет `API_PORT` из `.env` одновременно в сервер, healthcheck и
+Nginx. Например, при `API_PORT=3002` сервер слушает 3002 внутри сети Compose,
+а Nginx автоматически проксирует на `server:3002`; наружу по-прежнему доступен
+порт 80. Healthcheck использует отдельный быстрый `/api/health` с коротким
+интервалом, поэтому после уже собранных образов клиент не ждёт завершения
+задержанного `/api/org-tree`.
+
+### Проверка состояний mock API
+
+Перед каждым сценарием остановите стек (`Ctrl+C`, затем `docker compose down`),
+измените значения в `.env` и запустите `docker compose up --build` снова:
+
+```env
+# Нормальный ответ
+ORG_TREE_MODE=normal
+ORG_TREE_DELAY_MS=0
+
+# Пустой ответ → empty state клиента
+ORG_TREE_MODE=empty
+
+# HTTP 503 → error state клиента
+ORG_TREE_MODE=error
+
+# HTTP 200 с невалидным JSON-контрактом → validation error клиента
+ORG_TREE_MODE=invalid
+
+# Задержка ответа GET /api/org-tree на 10 секунд
+ORG_TREE_MODE=delay
+ORG_TREE_DELAY_MS=10000
+```
+
+При задержке сервер и Nginx запускаются сразу: `/api/health` отвечает быстро,
+поэтому Compose помечает `server` как healthy и запускает `client`. Клиент
+открывается на `http://localhost/`, показывает initial loading и делает запрос
+`/api/org-tree`; этот запрос получает ответ примерно через 10 секунд. До этого
+повторные попытки запроса не создаются самим сервером — политика retry и
+revalidation остаётся на стороне клиента. Проверить задержку можно так:
+
+```bash
+time curl -i http://localhost/api/org-tree
+```
+
+Для realtime-проверки используйте, например:
+
+```env
+ORG_TREE_MODE=normal
+REALTIME_MODE=scripted
+REALTIME_INTERVAL_MS=5000
+```
+
+После открытия клиента наблюдайте статус соединения и изменения метрик без
+полного перезапроса `/api/org-tree`.
+
 ## Предсказуемые realtime-обновления
 
 Обычный режим (`REALTIME_MODE=generated`) генерирует детерминированные, но
@@ -26,7 +119,7 @@ REALTIME_INTERVAL_MS=5000
 ```
 
 После перезапуска `npm run dev` сервер циклически отправляет шесть patch-событий,
-описанных комментариями в `server/realtime-generator.mjs`: меняются performance
+описанных комментариями в `server/realtime/realtime-generator.mjs`: меняются performance
 команды 1.1.1, headcount команды 1.1.2 и budget команды 1.1.3, затем те же
 значения возвращаются к исходным. Это наглядно меняет агрегированные показатели
 `Отдела 1.1` и `Дивизиона 1` в таблице и detail-панели canvas.

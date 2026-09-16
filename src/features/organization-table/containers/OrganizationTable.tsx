@@ -1,28 +1,41 @@
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
-import { TableShell, TableSurface } from './OrganizationTable.style';
-import type { OrgSnapshot } from '@/data/org-tree/org-tree-validation';
+import { TableEmptyCell, TableShell, TableState, TableStateButton, TableStateMessage, TableStateSpinner, TableSurface } from './OrganizationTable.style';
+import type { OrgSnapshot } from '@/data/org-tree/model/org-tree-types';
 import { buildOrganizationTableRows } from '@/features/organization-table/model/table-rows';
 import { cycleSort, reverseSort, sortOrganizationTableRows, type TableSort, type TableSortInteraction } from '@/features/organization-table/model/table-sorting';
 import { filterOrganizationTableRows } from '@/features/organization-table/model/table-filtering';
+import { filterOrganizationTableRowsByAiFilter, type AiFilter } from '@/features/organization-table/model/ai-filtering';
+import { resolveAiSearch } from '@/features/organization-table/model/ai-search';
 import { useDebouncedValue } from '@/features/organization-table/hooks/useDebouncedValue';
 import { OrganizationTableHeader } from '@/features/organization-table/components/OrganizationTableHeader';
 import { OrganizationTableRow } from '@/features/organization-table/components/OrganizationTableRow';
-import type { RealtimeFeedbackController } from '@/data/org-tree/use-realtime-feedback';
+import type { RealtimeFeedbackController } from '@/data/org-tree/hooks/use-realtime-feedback';
 
-export function OrganizationTable({ snapshot, selectedNodeId, onSelectNode, feedback }: {
-  snapshot: OrgSnapshot;
+export type OrganizationTableStatus = 'ready' | 'loading' | 'error' | 'empty';
+
+export function OrganizationTable({ snapshot, selectedNodeId, onSelectNode, feedback, status = 'ready', onRetry }: {
+  snapshot: OrgSnapshot | undefined;
   selectedNodeId: string | null;
   onSelectNode: (_nodeId: string) => void;
   feedback: RealtimeFeedbackController;
+  status?: OrganizationTableStatus;
+  onRetry?: () => void;
 }) {
   const [sort, setSort] = useState<TableSort>(null);
   const [filterInput, setFilterInput] = useState('');
+  const [aiFilter, setAiFilter] = useState<AiFilter | null>(null);
+  const [aiSearching, setAiSearching] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
   const [focusedRowId, setFocusedRowId] = useState<string | null>(null);
   const debouncedFilter = useDebouncedValue(filterInput, 250);
-  const baseRows = useMemo(() => buildOrganizationTableRows(snapshot), [snapshot]);
+  const baseRows = useMemo(() => snapshot === undefined ? [] : buildOrganizationTableRows(snapshot), [snapshot]);
   const filteredRows = useMemo(
-    () => filterOrganizationTableRows(baseRows, snapshot, debouncedFilter),
-    [baseRows, debouncedFilter, snapshot],
+    () => snapshot === undefined
+      ? []
+      : aiFilter === null
+        ? filterOrganizationTableRows(baseRows, snapshot, debouncedFilter)
+        : filterOrganizationTableRowsByAiFilter(baseRows, snapshot, aiFilter),
+    [aiFilter, baseRows, debouncedFilter, snapshot],
   );
   const rows = useMemo(() => sortOrganizationTableRows(filteredRows, sort), [filteredRows, sort]);
   const focusableRowId = rows.some((row) => row.id === focusedRowId)
@@ -90,11 +103,63 @@ export function OrganizationTable({ snapshot, selectedNodeId, onSelectNode, feed
     }
   };
 
+  const handleFilterChange = (value: string) => {
+    setFilterInput(value);
+    setAiFilter(null);
+    setAiError(null);
+  };
+
+  const handleAiSearch = () => {
+    const controller = new AbortController();
+    setAiSearching(true);
+    setAiError(null);
+    void resolveAiSearch(filterInput, controller.signal).then((result) => {
+      if (result.kind === 'ai') {
+        setAiFilter(result.filter);
+        return;
+      }
+      setAiFilter(null);
+      setAiError('AI-поиск недоступен. Использован текстовый поиск.');
+    }).finally(() => {
+      setAiSearching(false);
+    });
+  };
+
+  if (status !== 'ready' || snapshot === undefined) {
+    return (
+      <TableSurface role={status === 'error' ? 'alert' : 'status'}>
+        <TableState>
+          {status === 'loading' && <TableStateSpinner aria-hidden="true" />}
+          <TableStateMessage>
+            {status === 'loading' && 'Загрузка организации…'}
+            {status === 'error' && 'Не удалось загрузить организацию.'}
+            {status === 'empty' && 'Организация пока пуста.'}
+          </TableStateMessage>
+          {status === 'error' && onRetry !== undefined && <TableStateButton type="button" onClick={onRetry}>Повторить</TableStateButton>}
+        </TableState>
+      </TableSurface>
+    );
+  }
+
   return (
     <TableSurface ref={tableSurfaceRef}>
       <TableShell aria-label="Таблица организации" role="grid">
-        <OrganizationTableHeader filterInput={filterInput} onFilterChange={setFilterInput} onSortInteraction={handleSortInteraction} sort={sort} />
+        <colgroup>
+          <col />
+          <col />
+          <col />
+          <col />
+          <col />
+        </colgroup>
+        <OrganizationTableHeader aiError={aiError} aiSearching={aiSearching} filterInput={filterInput} onAiSearch={handleAiSearch} onFilterChange={handleFilterChange} onSortInteraction={handleSortInteraction} sort={sort} />
         <tbody>
+          {rows.length === 0 && (
+            <tr>
+              <TableEmptyCell colSpan={5} role="status">
+                {filterInput.trim() === '' ? 'Организация пока пуста.' : 'По вашему запросу ничего не найдено.'}
+              </TableEmptyCell>
+            </tr>
+          )}
           {rows.map((row) => (
             <OrganizationTableRow
               key={row.id}

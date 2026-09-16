@@ -2,10 +2,18 @@
 
 ## Слои
 
-- `server/` — независимый mock API на встроенном `node:http`. Он владеет
-  детерминированным плоским fixture и отвечает на `GET /api/org-tree`.
+- `server/` — независимый mock API на встроенном `node:http`. `app.mjs` только
+  собирает маршруты; конфигурация, HTTP-примитивы, обработчики ресурсов и SSE
+  lifecycle разделены по модулям. Сервер владеет детерминированным плоским
+  fixture и отвечает на `GET /api/org-tree`, `POST /api/ai-filter` и SSE-поток
+  `/api/org-tree/events`.
 - `src/data/org-tree/` — граница данных клиента: HTTP/JSON обработка,
   runtime-валидация, проверка инвариантов и нормализация в `OrgSnapshot`.
+  Внутри граница разделена по ответственности: `org-tree-schema` отвечает за
+  DTO-схему, `org-tree-topology` — за индексы и иерархические инварианты,
+  `org-tree-snapshot` — за публикацию snapshot, `org-tree-aggregation-*` — за
+  initial и incremental расчёты, а `org-tree-snapshot-reconciliation` и
+  `realtime-watermarks` — за reconciliation полной версии и realtime-метки.
 - TanStack Query — единственный владелец состояния запроса и кэша
   организации. Для ресурса используется stale time 5 секунд, общие
   concurrent-запросы, SWR-поведение и переданный `AbortSignal`.
@@ -15,7 +23,9 @@
   и canvas detail panel.
 - `src/features/organization-table/` — производная аналитическая проекция:
   строки строятся из snapshot, затем фильтруются и сортируются без изменения
-  canonical data.
+  canonical data. `model/table-types` содержит контракт строки и колонок,
+  `table-levels` — отображение глубины в бизнес-уровень, а отдельные модули
+  отвечают за projection, filtering, sorting и bonus AI-filtering.
 - `src/containers/OrganizationDashboard/` — orchestration и представление
   loading, initial error, valid empty и non-blocking background update states.
 

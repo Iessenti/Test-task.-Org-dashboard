@@ -1,11 +1,12 @@
 import { createMockServer } from './app.mjs';
 
 const port = Number(process.env.API_PORT ?? 3001);
+const host = process.env.API_HOST ?? '127.0.0.1';
 
 const server = createMockServer();
 
-server.listen(port, '127.0.0.1', () => {
-  console.log(`Mock server listening on http://127.0.0.1:${port}`);
+server.listen(port, host, () => {
+  console.log(`Mock server listening on http://${host}:${port}`);
 });
 
 server.on('error', (error) => {
